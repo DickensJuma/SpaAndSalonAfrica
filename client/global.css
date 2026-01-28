@@ -1,0 +1,175 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    /* Light theme - modern beauty magazine aesthetic */
+    --background: 0 0% 100%;
+    --foreground: 220 8% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 8% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 8% 18%;
+
+    /* Primary: elegant black for headlines and accents */
+    --primary: 220 8% 18%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: warm neutral taupe */
+    --secondary: 30 10% 92%;
+    --secondary-foreground: 220 8% 18%;
+
+    /* Muted: soft gray for secondary text */
+    --muted: 220 10% 87%;
+    --muted-foreground: 220 5% 50%;
+
+    /* Accent: refined gold for highlights */
+    --accent: 41 100% 52%;
+    --accent-foreground: 220 8% 18%;
+
+    /* Destructive: rose red for errors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 220 12% 92%;
+    --input: 220 12% 92%;
+    --ring: 41 100% 52%;
+
+    --radius: 0.375rem;
+
+    /* Sidebar colors */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 8% 18%;
+    --sidebar-primary: 220 8% 18%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 41 100% 52%;
+    --sidebar-accent-foreground: 220 8% 18%;
+    --sidebar-border: 220 12% 92%;
+    --sidebar-ring: 41 100% 52%;
+  }
+
+  .dark {
+    --background: 220 9% 12%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 9% 18%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 9% 18%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 0% 95%;
+    --primary-foreground: 220 8% 18%;
+
+    --secondary: 30 15% 28%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 220 10% 35%;
+    --muted-foreground: 220 8% 65%;
+
+    --accent: 41 100% 52%;
+    --accent-foreground: 220 8% 18%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 12% 22%;
+    --input: 220 12% 22%;
+    --ring: 41 100% 52%;
+
+    --sidebar-background: 220 9% 12%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 0 0% 95%;
+    --sidebar-primary-foreground: 220 8% 18%;
+    --sidebar-accent: 41 100% 52%;
+    --sidebar-accent-foreground: 220 8% 18%;
+    --sidebar-border: 220 12% 22%;
+    --sidebar-ring: 41 100% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Typography hierarchy for modern publication */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  h1 {
+    @apply text-5xl md:text-7xl font-bold tracking-tight;
+  }
+
+  h2 {
+    @apply text-4xl md:text-5xl font-bold tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold;
+  }
+
+  h4 {
+    @apply text-xl font-semibold;
+  }
+
+  p, span, li, a, button, label, td, th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  pre,
+  code {
+    overflow-x: auto;
+    white-space: pre;
+  }
+}
+
+/* Custom components for the beauty publication */
+@layer components {
+  /* Navigation bar styles */
+  .navbar {
+    @apply sticky top-0 z-50 bg-background border-b border-border shadow-sm;
+  }
+
+  /* Hero section container */
+  .hero-container {
+    @apply w-full h-screen md:h-[600px] relative overflow-hidden;
+  }
+
+  /* Featured article container - group class applied via JSX */
+  .featured-article {
+    @apply overflow-hidden;
+  }
+
+  .featured-article:hover .image-overlay {
+    @apply opacity-100;
+  }
+
+  /* Article card with hover effects */
+  .article-card {
+    @apply rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg;
+  }
+
+  /* Image overlay for cards */
+  .image-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300;
+  }
+}
