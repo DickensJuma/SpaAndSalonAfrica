@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -8,8 +8,7 @@ import { cn } from "@/lib/utils";
  * 
  * Responsive navigation bar with:
  * - Logo/brand name
- * - Menu items for different sections (Beauty, Wellness, Trends, etc.)
- * - Search functionality with icon
+ * - Menu items for different sections
  * - Mobile hamburger menu that expands on small screens
  * 
  * Features:
@@ -17,14 +16,35 @@ import { cn } from "@/lib/utils";
  * - Responsive design: full menu on desktop, hamburger on mobile
  * - Elegant styling matching the beauty publication aesthetic
  * - Smooth transitions and hover effects
+ * - Logo hides on scroll up, only nav menu remains visible
  */
 
 interface NavigationProps {
-  onSearchClick?: () => void;
+  // No props needed currently
 }
 
-export default function Navigation({ onSearchClick }: NavigationProps) {
+export default function Navigation({}: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show logo at top, hide when scrolled down
+      if (currentScrollY > 100) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   // Menu items for the salon and business website
   const menuItems = [
@@ -38,30 +58,17 @@ export default function Navigation({ onSearchClick }: NavigationProps) {
   ];
 
   return (
-    <nav className="navbar">
+    <nav className={cn(
+      "navbar sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border transition-all duration-300",
+      isScrolled && "shadow-sm"
+    )}>
       <div className="max-w-full px-4 sm:px-6 lg:px-8">
-        {/* Top row with search and mobile menu toggle */}
-        <div className="flex items-center justify-between h-16 md:h-auto md:py-4">
-          {/* Spacer for desktop, menu toggle for mobile */}
-          <div className="md:hidden flex-1" />
-
-          {/* Search Icon - visible on all sizes */}
-          <button
-            onClick={onSearchClick}
-            className={cn(
-              "md:absolute right-4 md:right-8 lg:right-12 p-2 rounded-md transition-colors duration-200",
-              "text-foreground/70 hover:text-foreground hover:bg-secondary"
-            )}
-            aria-label="Search"
-          >
-            <Search className="w-5 h-5" />
-          </button>
-
-          {/* Mobile Menu Toggle */}
+        {/* Top row with mobile menu toggle (mobile only) */}
+        <div className="flex items-center justify-end h-16 md:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className={cn(
-              "md:hidden p-2 rounded-md transition-colors duration-200",
+              "p-2 rounded-md transition-colors duration-200",
               "text-foreground/70 hover:text-foreground hover:bg-secondary"
             )}
             aria-label="Toggle menu"
@@ -74,8 +81,11 @@ export default function Navigation({ onSearchClick }: NavigationProps) {
           </button>
         </div>
 
-        {/* Centered Logo/Brand */}
-        <div className="flex justify-center py-4 md:py-6">
+        {/* Centered Logo/Brand - Hidden when scrolled */}
+        <div className={cn(
+          "flex justify-center py-4 md:py-6 transition-all duration-300 overflow-hidden",
+          isScrolled ? "max-h-0 py-0 opacity-0" : "max-h-40 opacity-100"
+        )}>
           <Link to="/" className="flex flex-col items-center gap-2 md:gap-3">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2Fb53adb8194b04987900de37b33347409%2F626c20dbe0ab423b917a9dd901b3f69c?format=webp&width=80&height=80"
@@ -93,8 +103,11 @@ export default function Navigation({ onSearchClick }: NavigationProps) {
           </Link>
         </div>
 
-        {/* Desktop Menu - Centered below logo */}
-        <div className="hidden md:flex items-center justify-center gap-8 md:gap-10 py-4 border-t border-border">
+        {/* Desktop Menu - Centered below logo, more compact when scrolled */}
+        <div className={cn(
+          "hidden md:flex items-center justify-center gap-8 md:gap-10 border-t border-border transition-all duration-300",
+          isScrolled ? "py-2" : "py-4"
+        )}>
           {menuItems.map((item) => (
             <Link
               key={item.label}
