@@ -2,7 +2,6 @@ import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
 import { ContactSection } from "@/components/ContactSection";
 import { Sparkles, Scissors, Droplet, Users, ArrowRight, Star } from "lucide-react";
-import { useMemo } from "react";
 
 export default function Landing() {
   return (
