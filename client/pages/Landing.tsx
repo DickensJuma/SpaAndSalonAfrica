@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
 import { ContactSection } from "@/components/ContactSection";
 import { Sparkles, Scissors, Droplet, Users, ArrowRight, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   return (
@@ -46,20 +47,27 @@ export default function Landing() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
-                <button className={cn(
-                  "px-8 py-4 rounded-sm font-semibold text-lg",
-                  "bg-accent text-foreground hover:bg-amber-600",
-                  "transition-all duration-200 hover:scale-105"
-                )}>
-                  Join the Business Club <ArrowRight className="w-5 h-5 ml-2 inline" />
-                </button>
-                <button className={cn(
-                  "px-8 py-4 rounded-sm font-semibold text-lg",
-                  "bg-secondary text-foreground hover:bg-secondary/80",
-                  "transition-colors duration-200 border border-border"
-                )}>
+                <Link
+                  to="/business-club"
+                  className={cn(
+                    "px-8 py-4 rounded-sm font-semibold text-lg",
+                    "bg-accent text-foreground hover:bg-amber-600",
+                    "transition-all duration-200 hover:scale-105 text-center"
+                  )}
+                >
+                  Join the Business Club{" "}
+                  <ArrowRight className="w-5 h-5 ml-2 inline" />
+                </Link>
+                <Link
+                  to="/services"
+                  className={cn(
+                    "px-8 py-4 rounded-sm font-semibold text-lg",
+                    "bg-secondary text-foreground hover:bg-secondary/80",
+                    "transition-colors duration-200 border border-border text-center"
+                  )}
+                >
                   Explore Growth Programs
-                </button>
+                </Link>
               </div>
 
               <div className="text-sm text-foreground/60">
