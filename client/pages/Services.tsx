@@ -9,10 +9,10 @@ export default function Services() {
       icon: Scissors,
       description: "One-on-one and group coaching for salon, spa & barbershop owners",
       items: [
-        { name: "Business Foundations Audit", price: "$60" },
-        { name: "Pricing & Profit Strategy Session", price: "$120" },
-        { name: "Team & Operations Coaching", price: "$90" },
-        { name: "Monthly CEO Accountability", price: "$180" }
+        { name: "Business Foundations Audit", price: "KES 6,000" },
+        { name: "Pricing & Profit Strategy Session", price: "KES 12,000" },
+        { name: "Team & Operations Coaching", price: "KES 9,000" },
+        { name: "Monthly CEO Accountability", price: "KES 18,000" }
       ]
     },
     {
@@ -20,10 +20,10 @@ export default function Services() {
       icon: Sparkles,
       description: "Marketing systems tailored for African beauty businesses",
       items: [
-        { name: "Social Media Content Playbook", price: "$80" },
-        { name: "Brand Positioning & Messaging", price: "$120" },
-        { name: "Client Retention & Loyalty Design", price: "$95" },
-        { name: "Launch Campaign Strategy", price: "$150" }
+        { name: "Social Media Content Playbook", price: "KES 8,000" },
+        { name: "Brand Positioning & Messaging", price: "KES 12,000" },
+        { name: "Client Retention & Loyalty Design", price: "KES 9,500" },
+        { name: "Launch Campaign Strategy", price: "KES 15,000" }
       ]
     },
     {
@@ -31,10 +31,10 @@ export default function Services() {
       icon: Droplet,
       description: "Back-end systems that keep your business running smoothly",
       items: [
-        { name: "Booking & Scheduling Systems", price: "$100" },
-        { name: "Standard Operating Procedures Kit", price: "$140" },
-        { name: "Retail & Inventory Setup", price: "$110" },
-        { name: "Staff Onboarding Framework", price: "$180" }
+        { name: "Booking & Scheduling Systems", price: "KES 10,000" },
+        { name: "Standard Operating Procedures Kit", price: "KES 14,000" },
+        { name: "Retail & Inventory Setup", price: "KES 11,000" },
+        { name: "Staff Onboarding Framework", price: "KES 18,000" }
       ]
     },
     {
@@ -42,10 +42,10 @@ export default function Services() {
       icon: Wind,
       description: "Training for owners and teams to level up skills and service",
       items: [
-        { name: "New Owner Bootcamp", price: "$150" },
-        { name: "Front Desk & Client Experience Training", price: "$90" },
-        { name: "Retail Sales Training", price: "$85" },
-        { name: "Leadership for Salon Managers", price: "$160" }
+        { name: "New Owner Bootcamp", price: "KES 15,000" },
+        { name: "Front Desk & Client Experience Training", price: "KES 9,000" },
+        { name: "Retail Sales Training", price: "KES 8,500" },
+        { name: "Leadership for Salon Managers", price: "KES 16,000" }
       ]
     }
   ];
@@ -155,7 +155,7 @@ export default function Services() {
             {[
               {
                 name: "Launch Ready",
-                price: "$500",
+                price: "KES 50,000",
                 services: [
                   "Brand & positioning workshop",
                   "Pricing & menu design",
@@ -165,7 +165,7 @@ export default function Services() {
               },
               {
                 name: "Scale & Systemise",
-                price: "$350",
+                price: "KES 35,000",
                 services: [
                   "Operations & SOP review",
                   "Team roles & responsibilities map",
@@ -175,7 +175,7 @@ export default function Services() {
               },
               {
                 name: "Market Leader",
-                price: "$600",
+                price: "KES 60,000",
                 services: [
                   "Advanced marketing strategy",
                   "Membership & loyalty design",

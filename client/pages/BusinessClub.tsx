@@ -112,7 +112,7 @@ export default function BusinessClub() {
             {[
               {
                 name: "Starter",
-                price: "$99",
+                price: "KES 9,900",
                 period: "/year",
                 features: [
                   "Access to private community",
@@ -122,7 +122,7 @@ export default function BusinessClub() {
               },
               {
                 name: "Growth",
-                price: "$199",
+                price: "KES 19,900",
                 period: "/year",
                 features: [
                   "Everything in Starter",
@@ -134,7 +134,7 @@ export default function BusinessClub() {
               },
               {
                 name: "Leader",
-                price: "$399",
+                price: "KES 39,900",
                 period: "/year",
                 features: [
                   "Everything in Growth",
