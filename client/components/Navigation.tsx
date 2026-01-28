@@ -29,10 +29,11 @@ export default function Navigation({ onSearchClick }: NavigationProps) {
   // Menu items for the salon and business website
   const menuItems = [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
+    { label: "Magazine", href: "/magazine" },
     { label: "Business Club", href: "/business-club" },
     { label: "Events", href: "/events" },
     { label: "Services", href: "/services" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ];
 
