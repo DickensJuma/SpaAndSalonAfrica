@@ -90,8 +90,8 @@ export default function Services() {
                   className="rounded-lg border border-border overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   {/* Header */}
-                  <div className="bg-accent/10 p-6 flex items-center gap-4">
-                    <Icon className="w-10 h-10 text-accent flex-shrink-0" />
+                  <div className="bg-black/5 p-6 flex items-center gap-4">
+                    <Icon className="w-10 h-10 text-black flex-shrink-0" />
                     <div>
                       <h3 className={cn(
                         "font-display text-xl font-semibold",
@@ -115,7 +115,7 @@ export default function Services() {
                         <h4 className="font-medium text-foreground">
                           {item.name}
                         </h4>
-                        <span className="text-accent font-semibold text-sm">
+                        <span className="text-black font-semibold text-sm">
                           {item.price}
                         </span>
                       </div>
@@ -126,7 +126,7 @@ export default function Services() {
                   <div className="p-4 bg-secondary/20">
                     <button className={cn(
                       "w-full px-4 py-2 rounded-sm font-semibold",
-                      "bg-accent text-foreground hover:bg-amber-600",
+                      "bg-black text-white hover:bg-black/90",
                       "transition-colors duration-200 text-sm"
                     )}>
                       Talk to Our Team
@@ -196,14 +196,14 @@ export default function Services() {
                 </h3>
                 <p className={cn(
                   "font-display text-3xl font-bold mb-6",
-                  "text-accent"
+                  "text-black"
                 )}>
                   {pkg.price}
                 </p>
                 <ul className="space-y-3 mb-6">
                   {pkg.services.map((service) => (
                     <li key={service} className="flex items-center gap-2 text-foreground/70">
-                      <div className="w-2 h-2 rounded-full bg-accent" />
+                      <div className="w-2 h-2 rounded-full bg-black" />
                       <span className="text-sm font-light">{service}</span>
                     </li>
                   ))}
@@ -211,7 +211,7 @@ export default function Services() {
                 <button
                   className={cn(
                     "w-full px-4 py-2 rounded-sm font-semibold",
-                    "bg-accent text-foreground hover:bg-amber-600",
+                    "bg-black text-white hover:bg-black/90",
                     "transition-colors duration-200"
                   )}
                 >

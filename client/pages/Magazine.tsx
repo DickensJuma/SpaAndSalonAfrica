@@ -113,7 +113,7 @@ export default function Magazine() {
               <p className="text-sm text-foreground/50 uppercase tracking-widest">
                 Latest Issue
               </p>
-              <p className="text-4xl font-bold text-accent">March 2025</p>
+              <p className="text-4xl font-bold text-black">March 2025</p>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function Magazine() {
               <div>
                 <span className={cn(
                   "inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase",
-                  "bg-accent text-foreground mb-4"
+                  "bg-black text-white mb-4"
                 )}>
                   {featuredArticle.category}
                 </span>
@@ -174,7 +174,7 @@ export default function Magazine() {
               
               <button className={cn(
                 "inline-flex items-center gap-2 px-6 py-3 rounded-sm font-semibold",
-                "bg-accent text-foreground hover:bg-amber-600",
+                "bg-black text-white hover:bg-black/90",
                 "transition-colors duration-200"
               )}>
                 Read Full Article <ArrowRight className="w-4 h-4" />
@@ -215,7 +215,7 @@ export default function Magazine() {
                   <div className="flex items-center justify-between mb-3">
                     <span className={cn(
                       "text-xs font-semibold uppercase tracking-wider",
-                      "text-accent"
+                      "text-black"
                     )}>
                       {article.category}
                     </span>
@@ -226,7 +226,7 @@ export default function Magazine() {
                   
                   <h3 className={cn(
                     "font-display text-lg font-bold mb-3 line-clamp-2",
-                    "text-foreground group-hover:text-accent transition-colors"
+                    "text-foreground group-hover:text-black transition-colors"
                   )}>
                     {article.title}
                   </h3>
@@ -242,7 +242,7 @@ export default function Magazine() {
                     <div className="text-xs text-foreground/50">
                       {article.date}
                     </div>
-                    <span className="text-xs font-semibold text-accent">
+                    <span className="text-xs font-semibold text-black">
                       {article.author}
                     </span>
                   </div>
@@ -256,7 +256,7 @@ export default function Magazine() {
       {/* Newsletter */}
       <section className={cn(
         "py-16 md:py-20 px-4 sm:px-6 lg:px-8",
-        "bg-accent/10"
+        "bg-black/5"
       )}>
         <div className="max-w-2xl mx-auto text-center">
           <h2
@@ -281,14 +281,14 @@ export default function Magazine() {
                 "flex-1 px-4 py-3 rounded-sm",
                 "bg-background border border-border",
                 "text-foreground placeholder:text-foreground/50",
-                "focus:outline-none focus:ring-2 focus:ring-accent"
+                "focus:outline-none focus:ring-2 focus:ring-black"
               )}
             />
             <button
               type="submit"
               className={cn(
                 "px-6 py-3 rounded-sm font-semibold",
-                "bg-accent text-foreground hover:bg-amber-600",
+                "bg-black text-white hover:bg-black/90",
                 "transition-colors duration-200"
               )}
             >

@@ -64,7 +64,7 @@ export default function AdsBanner({
               onClick={onCtaClick}
               className={cn(
                 "px-6 py-2 rounded-sm font-semibold whitespace-nowrap",
-                "bg-accent text-foreground hover:bg-amber-600",
+                "bg-black text-white hover:bg-black/90",
                 "transition-colors duration-200",
                 "text-sm md:text-base"
               )}
@@ -77,7 +77,7 @@ export default function AdsBanner({
               onClick={() => setIsVisible(false)}
               className={cn(
                 "p-2 rounded-md transition-colors duration-200",
-                "text-foreground/60 hover:text-foreground hover:bg-accent/10"
+                "text-foreground/60 hover:text-foreground hover:bg-black/10"
               )}
               aria-label="Close ad"
             >

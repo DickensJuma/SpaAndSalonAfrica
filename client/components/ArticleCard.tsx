@@ -70,7 +70,7 @@ export default function ArticleCard({
             <div className="absolute top-4 left-4 z-10">
               <span className={cn(
                 "inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
-                "bg-accent text-foreground"
+                "bg-black text-white"
               )}>
                 {category}
               </span>
@@ -87,7 +87,7 @@ export default function ArticleCard({
           <h3 className={cn(
             "font-display font-bold mb-2 line-clamp-2",
             featured ? "text-3xl md:text-4xl" : "text-lg md:text-xl",
-            "text-foreground transition-colors duration-200 group-hover:text-accent"
+            "text-foreground transition-colors duration-200 group-hover:text-black"
           )}>
             {title}
           </h3>

@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
 import { ContactSection } from "@/components/ContactSection";
+import MarketingBanner from "@/components/MarketingBanner";
 import { Sparkles, Scissors, Droplet, Users, ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -10,16 +11,17 @@ export default function Landing() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-accent/5 to-transparent">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
+      <section className="py-24 md:py-40 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black/5 to-transparent">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Hero Copy */}
-            <div className="text-center md:text-left">
-              <div className="mb-8 inline-block">
+            <div className="text-center md:text-left space-y-8">
+              <div className="mb-6 inline-block">
                 <span
                   className={cn(
-                    "px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider",
-                    "bg-accent/20 text-accent border border-accent/30"
+                    "px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest",
+                    "bg-black/10 text-black border border-black/20",
+                    "hover:bg-black/20 transition-colors duration-200"
                   )}
                 >
                   Spa &amp; Salon African
@@ -28,31 +30,32 @@ export default function Landing() {
 
               <h1
                 className={cn(
-                  "font-display text-4xl md:text-6xl font-bold mb-6 leading-tight",
-                  "text-foreground"
+                  "font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.15]",
+                  "text-foreground tracking-tight"
                 )}
               >
-                Empowering Salon, Spa &amp; Barbershop
+                Empowering Beauty Business
                 <br />
-                business owners in Africa
+                <span className="text-black">Owners in Africa</span>
               </h1>
 
               <p
                 className={cn(
-                  "text-foreground/70 text-xl md:text-2xl max-w-3xl md:max-w-none mx-auto md:mx-0 mb-8",
+                  "text-foreground/70 text-lg md:text-xl lg:text-2xl max-w-3xl md:max-w-none mx-auto md:mx-0 mb-10",
                   "font-light leading-relaxed"
                 )}
               >
                 Business tips | Marketing | Growth | Community
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
+              <div className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start mb-6">
                 <Link
                   to="/business-club"
                   className={cn(
-                    "px-8 py-4 rounded-sm font-semibold text-lg",
-                    "bg-accent text-foreground hover:bg-amber-600",
-                    "transition-all duration-200 hover:scale-105 text-center"
+                    "px-10 py-5 rounded-sm font-semibold text-lg",
+                    "bg-black text-white hover:bg-black/90",
+                    "transition-all duration-300 hover:scale-105 hover:shadow-xl",
+                    "text-center active:scale-95"
                   )}
                 >
                   Join the Business Club{" "}
@@ -61,61 +64,54 @@ export default function Landing() {
                 <Link
                   to="/services"
                   className={cn(
-                    "px-8 py-4 rounded-sm font-semibold text-lg",
-                    "bg-secondary text-foreground hover:bg-secondary/80",
-                    "transition-colors duration-200 border border-border text-center"
+                    "px-10 py-5 rounded-sm font-semibold text-lg",
+                    "bg-white text-black hover:bg-black/5",
+                    "transition-all duration-300 border-2 border-black",
+                    "text-center hover:shadow-lg active:scale-95"
                   )}
                 >
                   Explore Growth Programs
                 </Link>
               </div>
 
-              <div className="text-sm text-foreground/60">
+              <div className="text-base text-foreground/60 font-light">
                 Supporting owners across Africa with practical tools and community.
               </div>
             </div>
 
             {/* Hero Image */}
-            <div className="relative h-72 md:h-96 rounded-lg overflow-hidden shadow-lg">
+            <div className="relative h-96 md:h-[550px] lg:h-[650px] rounded-lg overflow-hidden shadow-2xl group">
               <img
                 src="https://images.unsplash.com/photo-1643543156023-de1549751414?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="African salon and barbershop owners collaborating"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="eager"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <p className="text-xs uppercase tracking-widest mb-1 text-white/70">
-                  Real Owners. Real Businesses.
-                </p>
-                <p className="text-sm md:text-base font-medium">
-                  Built for the everyday realities of salon, spa &amp; barbershop businesses in Africa.
-                </p>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Services */}
-      <section className="py-20 md:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+      <section className="py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
             <h2 className={cn(
-              "font-display text-4xl md:text-5xl font-bold mb-4",
-              "text-foreground"
+              "font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6",
+              "text-foreground tracking-tight"
             )}>
               Core Pillars of Growth
             </h2>
             <p className={cn(
-              "text-foreground/60 text-lg max-w-2xl mx-auto",
-              "font-light"
+              "text-foreground/60 text-xl md:text-2xl max-w-3xl mx-auto",
+              "font-light leading-relaxed"
             )}>
               Everything we do is built around helping African salon, spa &amp;
               barbershop owners grow stronger businesses.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 icon: Scissors,
@@ -161,34 +157,34 @@ export default function Landing() {
                   "Peer support",
                 ],
               }
-            ].map((service, idx) => {
+            ].map((service) => {
               const Icon = service.icon;
               return (
                 <div
-                  key={idx}
+                  key={service.title}
                   className={cn(
-                    "p-6 rounded-lg border transition-all duration-300",
-                    "hover:shadow-lg hover:border-accent",
-                    "bg-secondary/30 border-border"
+                    "p-8 rounded-lg border-2 transition-all duration-300",
+                    "hover:shadow-2xl hover:border-black hover:-translate-y-2",
+                    "bg-white border-black/10 cursor-pointer group"
                   )}
                 >
-                  <Icon className="w-10 h-10 text-accent mb-4" />
+                  <Icon className="w-12 h-12 text-black mb-6 transition-transform duration-300 group-hover:scale-110" />
                   <h3 className={cn(
-                    "font-display text-xl font-semibold mb-2",
+                    "font-display text-2xl font-bold mb-3",
                     "text-foreground"
                   )}>
                     {service.title}
                   </h3>
                   <p className={cn(
-                    "text-foreground/60 text-sm mb-4",
-                    "font-light"
+                    "text-foreground/60 text-base mb-6",
+                    "font-light leading-relaxed"
                   )}>
                     {service.description}
                   </p>
-                  <ul className="text-xs space-y-2">
+                  <ul className="space-y-3">
                     {service.items.map((item) => (
-                      <li key={item} className="text-foreground/50 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                      <li key={item} className="text-foreground/60 flex items-center gap-3 text-sm font-light">
+                        <span className="w-2 h-2 rounded-full bg-black flex-shrink-0" />
                         {item}
                       </li>
                     ))}
@@ -201,28 +197,30 @@ export default function Landing() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-secondary/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className="py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-black/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1">
-              <img
-                src="https://images.unsplash.com/photo-1765607476260-db2f5e310ea6?q=80&w=1064&auto=format&fit=crop"
-                alt="Salon interior"
-                className="rounded-lg w-full h-96 object-cover"
-              />
+              <div className="rounded-lg overflow-hidden shadow-2xl group">
+                <img
+                  src="https://images.unsplash.com/photo-1765607476260-db2f5e310ea6?q=80&w=1064&auto=format&fit=crop"
+                  alt="Salon interior"
+                  className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
             </div>
 
-            <div className="order-1 md:order-2">
+            <div className="order-1 md:order-2 space-y-8">
               <h2
                 className={cn(
-                  "font-display text-4xl font-bold mb-6",
-                  "text-foreground"
+                  "font-display text-5xl md:text-6xl font-bold mb-8",
+                  "text-foreground tracking-tight"
                 )}
               >
                 Why Spa &amp; Salon African?
               </h2>
 
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {[
                   {
                     title: "Built for African Owners",
@@ -242,21 +240,21 @@ export default function Landing() {
                   {
                     title: "Community & Accountability",
                     description:
-                      "You’re not building alone — connect with other ambitious owners to share wins, challenges and support.",
+                      "You're not building alone — connect with other ambitious owners to share wins, challenges and support.",
                   },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4">
-                    <Star className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-5 group/item">
+                    <Star className="w-7 h-7 text-black flex-shrink-0 mt-1 transition-transform duration-300 group-hover/item:scale-110" />
                     <div>
                       <h3
                         className={cn(
-                          "font-semibold text-lg mb-1",
+                          "font-bold text-xl mb-2",
                           "text-foreground"
                         )}
                       >
                         {item.title}
                       </h3>
-                      <p className="text-foreground/60 font-light">
+                      <p className="text-foreground/60 font-light text-base leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -264,33 +262,35 @@ export default function Landing() {
                 ))}
               </div>
 
-              <button
+              <Link
+                to="/about"
                 className={cn(
-                  "mt-8 px-6 py-3 rounded-sm font-semibold",
-                  "bg-accent text-foreground hover:bg-amber-600",
-                  "transition-colors duration-200"
+                  "inline-block mt-10 px-8 py-4 rounded-sm font-semibold text-lg",
+                  "bg-black text-white hover:bg-black/90",
+                  "transition-all duration-300 hover:scale-105 hover:shadow-xl",
+                  "active:scale-95"
                 )}
               >
                 Explore How We Help
-              </button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 md:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+      <section className="py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
             <h2 className={cn(
-              "font-display text-4xl md:text-5xl font-bold mb-4",
-              "text-foreground"
+              "font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-6",
+              "text-foreground tracking-tight"
             )}>
               What Our Members Say
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-10">
             {[
               {
                 name: "Zainab Hassan",
@@ -310,29 +310,30 @@ export default function Landing() {
                 text: "Being part of this community means I never feel like I’m building alone. The workshops and support are priceless.",
                 rating: 5
               }
-            ].map((testimonial, idx) => (
+            ].map((testimonial) => (
               <div
-                key={idx}
+                key={testimonial.name}
                 className={cn(
-                  "p-6 rounded-lg border border-border",
-                  "bg-secondary/30"
+                  "p-8 rounded-lg border-2 border-black/10",
+                  "bg-white hover:border-black hover:shadow-2xl",
+                  "transition-all duration-300 hover:-translate-y-2 group"
                 )}
               >
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-1 mb-6" aria-label={`${testimonial.rating} out of 5 stars`}>
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-accent text-accent" />
+                    <Star key={`star-${i}`} className="w-5 h-5 fill-black text-black" aria-hidden="true" />
                   ))}
                 </div>
 
                 <p className={cn(
-                  "text-foreground/70 mb-6",
-                  "font-light"
+                  "text-foreground/70 mb-8 text-lg",
+                  "font-light leading-relaxed"
                 )}>
                   "{testimonial.text}"
                 </p>
 
-                <div className="border-t border-border/50 pt-4">
-                  <p className="font-semibold text-foreground">
+                <div className="border-t border-black/10 pt-6">
+                  <p className="font-bold text-foreground text-lg mb-1">
                     {testimonial.name}
                   </p>
                   <p className="text-sm text-foreground/60 font-light">
@@ -345,39 +346,57 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Marketing Banner - Promote Other Businesses */}
+      <MarketingBanner
+        businessName="Featured Partner Business"
+        description="Discover amazing products and services from our trusted partners. We carefully select businesses that align with our mission to support beauty entrepreneurs across Africa."
+        imageUrl="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop"
+        ctaText="Visit Partner"
+        ctaUrl="#"
+        backgroundColor="bg-white"
+      />
+
       {/* CTA Section */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-accent/10">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-24 md:py-32 px-4 sm:px-6 lg:px-8 bg-black/5">
+        <div className="max-w-5xl mx-auto text-center">
           <h2 className={cn(
-            "font-display text-4xl font-bold mb-6",
-            "text-foreground"
+            "font-display text-5xl md:text-6xl lg:text-7xl font-bold mb-8",
+            "text-foreground tracking-tight"
           )}>
             Ready to Grow Your Beauty Business?
           </h2>
 
           <p className={cn(
-            "text-foreground/70 text-lg mb-8",
-            "font-light"
+            "text-foreground/70 text-xl md:text-2xl mb-12 max-w-3xl mx-auto",
+            "font-light leading-relaxed"
           )}>
             Take the next step toward a stronger, more profitable salon, spa or
             barbershop with the support of Spa &amp; Salon African.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className={cn(
-              "px-8 py-4 rounded-sm font-semibold text-lg",
-              "bg-accent text-foreground hover:bg-amber-600",
-              "transition-all duration-200"
-            )}>
+          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <Link
+              to="/business-club"
+              className={cn(
+                "px-10 py-5 rounded-sm font-semibold text-lg",
+                "bg-black text-white hover:bg-black/90",
+                "transition-all duration-300 hover:scale-105 hover:shadow-xl",
+                "active:scale-95"
+              )}
+            >
               Join the Business Club
-            </button>
-            <button className={cn(
-              "px-8 py-4 rounded-sm font-semibold text-lg",
-              "bg-secondary text-foreground hover:bg-secondary/80",
-              "transition-colors duration-200 border border-border"
-            )}>
+            </Link>
+            <Link
+              to="/services"
+              className={cn(
+                "px-10 py-5 rounded-sm font-semibold text-lg",
+                "bg-white text-black hover:bg-black/5",
+                "transition-all duration-300 border-2 border-black",
+                "hover:shadow-lg active:scale-95"
+              )}
+            >
               Explore Growth Programs
-            </button>
+            </Link>
           </div>
         </div>
       </section>
