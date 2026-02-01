@@ -8,7 +8,7 @@ export default function BusinessClub() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-accent/10">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-black/5">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className={cn(
             "font-display text-5xl md:text-6xl font-bold mb-6",
@@ -78,7 +78,7 @@ export default function BusinessClub() {
               },
             ].map((benefit, index) => (
               <div key={index} className="flex gap-4 p-6 rounded-lg bg-secondary/30">
-                <benefit.icon className="w-8 h-8 text-accent flex-shrink-0 mt-1" />
+                <benefit.icon className="w-8 h-8 text-black flex-shrink-0 mt-1" />
                 <div>
                   <h3 className={cn(
                     "font-display font-semibold mb-2",
@@ -149,7 +149,7 @@ export default function BusinessClub() {
                 className={cn(
                   "rounded-lg p-8 transition-transform hover:scale-105",
                   tier.featured
-                    ? "bg-accent/20 border-2 border-accent"
+                    ? "bg-black/10 border-2 border-black"
                     : "bg-secondary/30"
                 )}
               >
@@ -173,7 +173,7 @@ export default function BusinessClub() {
                 <ul className="space-y-3 mb-6">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-foreground/70">
-                      <Check className="w-4 h-4 text-accent" />
+                      <Check className="w-4 h-4 text-black" />
                       <span className="text-sm font-light">{feature}</span>
                     </li>
                   ))}
@@ -181,7 +181,7 @@ export default function BusinessClub() {
                 <button className={cn(
                   "w-full py-2 rounded-sm font-semibold transition-colors",
                   tier.featured
-                    ? "bg-accent text-foreground hover:bg-amber-600"
+                    ? "bg-black text-white hover:bg-black/90"
                     : "bg-secondary text-foreground hover:bg-secondary/80"
                 )}>
                   Join Now

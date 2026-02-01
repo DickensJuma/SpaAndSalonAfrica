@@ -15,10 +15,13 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname,
-    );
+    // Log 404 errors for analytics/monitoring (only in development)
+    if (import.meta.env.DEV) {
+      console.error(
+        "404 Error: User attempted to access non-existent route:",
+        location.pathname,
+      );
+    }
   }, [location.pathname]);
 
   return (
@@ -68,15 +71,15 @@ const NotFound = () => {
               to="/"
               className={cn(
                 "px-8 py-3 rounded-sm font-semibold",
-                "bg-accent text-foreground",
-                "hover:bg-amber-600 transition-colors duration-200",
+                "bg-black text-white",
+                "hover:bg-black/90 transition-colors duration-200",
                 "active:scale-95 transform"
               )}
             >
               Back to Home
             </Link>
-            <a
-              href="#"
+            <Link
+              to="/magazine"
               className={cn(
                 "px-8 py-3 rounded-sm font-semibold",
                 "bg-secondary text-foreground",
@@ -86,16 +89,16 @@ const NotFound = () => {
               )}
             >
               Browse Articles
-            </a>
+            </Link>
           </div>
 
           {/* Additional Help */}
           <p className={cn(
             "text-sm text-foreground/50 mt-12 pt-8 border-t border-border"
           )}>
-            Need help? <a href="#" className="text-accent hover:text-amber-600 transition-colors">
+            Need help? <Link to="/contact" className="text-black hover:text-black/70 transition-colors">
               Contact our support team
-            </a>
+            </Link>
           </p>
         </div>
       </div>

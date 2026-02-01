@@ -256,7 +256,7 @@ export default function Index() {
                 href="/contact"
                 className={cn(
                   "inline-flex items-center justify-center px-6 py-3 rounded-sm font-semibold",
-                  "bg-accent text-foreground hover:bg-amber-600",
+                  "bg-black text-white hover:bg-black/90",
                   "transition-colors duration-200"
                 )}
               >
@@ -304,7 +304,7 @@ export default function Index() {
                 "flex-1 px-4 py-3 rounded-sm",
                 "bg-background border border-border",
                 "text-foreground placeholder:text-foreground/50",
-                "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2",
+                "focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2",
                 "transition-all duration-200"
               )}
               required
@@ -313,8 +313,8 @@ export default function Index() {
               type="submit"
               className={cn(
                 "px-6 py-3 rounded-sm font-semibold",
-                "bg-accent text-foreground",
-                "hover:bg-amber-600 transition-colors duration-200",
+                "bg-black text-white",
+                "hover:bg-black/90 transition-colors duration-200",
                 "active:scale-95 transform"
               )}
             >
@@ -401,7 +401,7 @@ export default function Index() {
                     aria-label={label}
                     className={cn(
                       "p-2 rounded-md bg-secondary",
-                      "text-foreground/60 hover:text-foreground hover:bg-accent",
+                      "text-foreground/60 hover:text-foreground hover:bg-black/10",
                       "transition-all duration-200"
                     )}
                   >

@@ -6,14 +6,13 @@
  * - Large center image (spans full height)
  * - 2 smaller images stacked on left
  * - 2 smaller images stacked on right
- * - Text overlays with title, description, and author
+ * - Clean image display without text overlays
  * - Responsive design for mobile and tablet
  * 
  * Features:
  * - Elegant grid-based image showcase
- * - Title, description, and author info on each image
  * - Responsive: stacks to single column on mobile
- * - Smooth image transitions and text overlays
+ * - Smooth image transitions on hover
  * - Professional spacing and sizing
  */
 
@@ -33,7 +32,7 @@ interface HeroSectionProps {
 }
 
 /**
- * Reusable image card component with overlay text
+ * Reusable image card component
  */
 const ImageCard = ({
   image,
@@ -44,51 +43,15 @@ const ImageCard = ({
 }) => {
   return (
     <div className={cn(
-      "relative overflow-hidden rounded-lg shadow-md bg-gray-200 group",
-      "h-full cursor-pointer"
+      "relative overflow-hidden rounded-lg shadow-lg bg-gray-200 group",
+      "h-full cursor-pointer hover:shadow-2xl transition-all duration-300"
     )}>
       {/* Image */}
       <img
         src={image.src}
         alt={image.alt}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
       />
-
-      {/* Gradient Overlay */}
-      <div className={cn(
-        "absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent",
-        "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-      )} />
-
-      {/* Text Content - Always visible */}
-      <div className={cn(
-        "absolute inset-0 flex flex-col justify-end p-3 md:p-4 text-white",
-        "bg-gradient-to-t from-black/70 via-transparent to-transparent"
-      )}>
-        {/* Title */}
-        <h3 className={cn(
-          "font-display font-semibold text-white mb-1 line-clamp-2",
-          isLarge ? "text-lg md:text-2xl" : "text-sm md:text-base"
-        )}>
-          {image.title}
-        </h3>
-
-        {/* Description */}
-        <p className={cn(
-          "text-white/80 text-xs md:text-sm line-clamp-1 mb-2",
-          "font-light leading-relaxed"
-        )}>
-          {image.description}
-        </p>
-
-        {/* Author */}
-        <p className={cn(
-          "text-white/60 text-xs",
-          "font-medium border-t border-white/20 pt-2"
-        )}>
-          By {image.author}
-        </p>
-      </div>
     </div>
   );
 };

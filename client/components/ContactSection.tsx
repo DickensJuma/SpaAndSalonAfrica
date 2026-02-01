@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Loader2 } from "lucide-react";
+import { ContactFormRequest, ContactFormResponse } from "@shared/api";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -10,18 +11,63 @@ export function ContactSection() {
     subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message. We'll get back to you soon!");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-    });
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const requestBody: ContactFormRequest = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: formData.subject,
+        message: formData.message,
+      };
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data: ContactFormResponse = await response.json();
+
+      if (data.success) {
+        setSubmitStatus({
+          type: "success",
+          message: data.message,
+        });
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: data.message || "Failed to send message. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      setSubmitStatus({
+        type: "error",
+        message: "An error occurred. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -54,7 +100,7 @@ export function ContactSection() {
             <div className="space-y-8">
               {/* Address */}
               <div className="flex gap-4">
-                <MapPin className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                <MapPin className="w-6 h-6 text-black flex-shrink-0 mt-1" />
                 <div>
                   <h3
                     className={cn(
@@ -74,7 +120,7 @@ export function ContactSection() {
 
               {/* Phone */}
               <div className="flex gap-4">
-                <Phone className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                <Phone className="w-6 h-6 text-black flex-shrink-0 mt-1" />
                 <div>
                   <h3
                     className={cn(
@@ -94,7 +140,7 @@ export function ContactSection() {
 
               {/* Email */}
               <div className="flex gap-4">
-                <Mail className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                <Mail className="w-6 h-6 text-black flex-shrink-0 mt-1" />
                 <div>
                   <h3
                     className={cn(
@@ -114,7 +160,7 @@ export function ContactSection() {
 
               {/* Hours */}
               <div className="flex gap-4">
-                <Clock className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                <Clock className="w-6 h-6 text-black flex-shrink-0 mt-1" />
                 <div>
                   <h3
                     className={cn(
@@ -163,7 +209,7 @@ export function ContactSection() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-accent"
+                    "focus:outline-none focus:ring-2 focus:ring-black"
                   )}
                   placeholder="Your name"
                 />
@@ -184,7 +230,7 @@ export function ContactSection() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-accent"
+                    "focus:outline-none focus:ring-2 focus:ring-black"
                   )}
                   placeholder="you@example.com"
                 />
@@ -204,7 +250,7 @@ export function ContactSection() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-accent"
+                    "focus:outline-none focus:ring-2 focus:ring-black"
                   )}
                   placeholder="(555) 123-4567"
                 />
@@ -224,7 +270,7 @@ export function ContactSection() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground",
-                    "focus:outline-none focus:ring-2 focus:ring-accent"
+                    "focus:outline-none focus:ring-2 focus:ring-black"
                   )}
                 >
                   <option value="">Select a subject</option>
@@ -251,22 +297,46 @@ export function ContactSection() {
                     "w-full px-4 py-2 rounded-sm resize-none",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-accent"
+                    "focus:outline-none focus:ring-2 focus:ring-black"
                   )}
                   placeholder="Your message here..."
                 />
               </div>
 
+              {/* Status Message */}
+              {submitStatus.type && (
+                <div
+                  className={cn(
+                    "p-4 rounded-sm text-sm",
+                    submitStatus.type === "success"
+                      ? "bg-black/10 text-black border border-black/20"
+                      : "bg-red-50 text-red-700 border border-red-200"
+                  )}
+                >
+                  {submitStatus.message}
+                </div>
+              )}
+
               {/* Submit Button */}
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className={cn(
                   "w-full px-6 py-3 rounded-sm font-semibold",
-                  "bg-accent text-foreground hover:bg-amber-600",
-                  "transition-colors duration-200"
+                  "bg-black text-white hover:bg-black/90",
+                  "transition-all duration-200",
+                  "disabled:opacity-50 disabled:cursor-not-allowed",
+                  "flex items-center justify-center gap-2"
                 )}
               >
-                Send Message
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send Message"
+                )}
               </button>
             </form>
           </div>

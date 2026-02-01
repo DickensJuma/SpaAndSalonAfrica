@@ -1,148 +1,134 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 /**
- * Navigation Component
+ * Navigation Component - ELLE Magazine Style
  * 
- * Responsive navigation bar with:
- * - Logo/brand name
- * - Menu items for different sections
- * - Mobile hamburger menu that expands on small screens
- * 
- * Features:
- * - Sticky positioning for always-accessible navigation
- * - Responsive design: full menu on desktop, hamburger on mobile
- * - Elegant styling matching the beauty publication aesthetic
- * - Smooth transitions and hover effects
- * - Logo hides on scroll up, only nav menu remains visible
+ * Clean, minimal navigation inspired by ELLE magazine:
+ * - Three-column layout: empty left, centered logo, CTA button right
+ * - Black and white color scheme
+ * - Bottom navigation bar with categories
+ * - Mobile hamburger menu
  */
 
 interface NavigationProps {
-  // No props needed currently
+  // No props needed currently, but interface kept for future extensibility
 }
 
-export default function Navigation({}: NavigationProps) {
+export default function Navigation(_props: NavigationProps = {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show logo at top, hide when scrolled down
-      if (currentScrollY > 100) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
-  // Menu items for the salon and business website
+  // Menu items for the bottom navigation bar
   const menuItems = [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
+    { label: "Magazine", href: "/magazine" },
     { label: "Business Club", href: "/business-club" },
     { label: "Events", href: "/events" },
     { label: "Services", href: "/services" },
-    { label: "Magazine", href: "/magazine" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ];
 
   return (
-    <nav className={cn(
-      "navbar sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border transition-all duration-300",
-      isScrolled && "shadow-sm"
-    )}>
-      <div className="max-w-full px-4 sm:px-6 lg:px-8">
-        {/* Top row with mobile menu toggle (mobile only) */}
+    <nav className="sticky top-0 z-50 bg-white border-b border-black/10">
+      {/* Main Header - ELLE Style */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Mobile Menu Toggle */}
         <div className="flex items-center justify-end h-16 md:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={cn(
-              "p-2 rounded-md transition-colors duration-200",
-              "text-foreground/70 hover:text-foreground hover:bg-secondary"
-            )}
+            className="p-2 text-black hover:bg-black/5 transition-colors"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             ) : (
-              <Menu className="w-5 h-5" />
+              <Menu className="w-6 h-6" />
             )}
           </button>
         </div>
 
-        {/* Centered Logo/Brand - Hidden when scrolled */}
-        <div className={cn(
-          "flex justify-center py-4 md:py-6 transition-all duration-300 overflow-hidden",
-          isScrolled ? "max-h-0 py-0 opacity-0" : "max-h-40 opacity-100"
-        )}>
-          <Link to="/" className="flex flex-col items-center gap-2 md:gap-3">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2Fb53adb8194b04987900de37b33347409%2F626c20dbe0ab423b917a9dd901b3f69c?format=webp&width=80&height=80"
-              alt="Spa & Salon Africa"
-              className="h-12 md:h-16 w-auto"
-            />
-            <div className="text-center">
-              <div className="font-display text-xl md:text-2xl font-semibold text-foreground">
-                SPA & SALON
-              </div>
-              <div className="text-xs md:text-sm text-foreground/60 tracking-widest uppercase">
-                Africa
-              </div>
-            </div>
-          </Link>
-        </div>
+        {/* Desktop: Three-column layout */}
+        <div className="hidden md:grid md:grid-cols-3 items-center py-6">
+          {/* Left: Empty spacer */}
+          <div></div>
 
-        {/* Desktop Menu - Centered below logo, more compact when scrolled */}
-        <div className={cn(
-          "hidden md:flex items-center justify-center gap-8 md:gap-10 border-t border-border transition-all duration-300",
-          isScrolled ? "py-2" : "py-4"
-        )}>
-          {menuItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.href}
-              className={cn(
-                "text-sm font-medium transition-colors duration-200 uppercase tracking-wider",
-                "text-foreground/70 hover:text-foreground",
-                "border-b-2 border-transparent hover:border-accent pb-1"
-              )}
-            >
-              {item.label}
+          {/* Center: Logo */}
+          <div className="flex justify-center">
+            <Link to="/" className="text-center">
+              <div className="font-display text-4xl md:text-5xl font-bold text-black tracking-tight">
+                SPA & SALON AFRICA
+              </div>
             </Link>
-          ))}
+          </div>
+
+          {/* Right: CTA Button */}
+          <div className="flex justify-end">
+            <Link
+              to="/business-club"
+              className="px-6 py-2 bg-black text-white uppercase text-sm font-semibold tracking-wider hover:bg-black/90 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
+            >
+              Join our business club
+            </Link>
+          </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden pb-4 border-t border-border">
+        {/* Mobile: Logo and Button Stack */}
+        <div className="md:hidden py-6 space-y-4">
+          <div className="flex justify-center">
+            <Link to="/" className="text-center">
+              <div className="font-display text-3xl font-bold text-black tracking-tight">
+                SPA & SALON AFRICA
+              </div>
+            </Link>
+          </div>
+          <div className="flex justify-center">
+            <Link
+              to="/business-club"
+              className="px-6 py-2 bg-black text-white uppercase text-xs font-semibold tracking-wider hover:bg-black/90 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
+            >
+              Join our business club
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Navigation Bar - Desktop */}
+      <div className="hidden md:block border-t border-black/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center gap-8 py-4">
             {menuItems.map((item) => (
               <Link
                 key={item.label}
                 to={item.href}
-                onClick={() => setIsMenuOpen(false)}
-                className={cn(
-                  "block px-4 py-3 text-sm font-medium text-center rounded-md",
-                  "text-foreground/70 hover:text-foreground hover:bg-secondary",
-                  "transition-colors duration-200 uppercase tracking-wider"
-                )}
+                className="text-sm font-medium text-black/70 hover:text-black uppercase tracking-wider transition-all duration-200 hover:scale-105"
               >
                 {item.label}
               </Link>
             ))}
           </div>
-        )}
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden border-t border-black/10 bg-white">
+          <div className="px-4 py-4 space-y-2">
+            {menuItems.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className="block py-3 text-sm font-medium text-black/70 hover:text-black uppercase tracking-wider text-center transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

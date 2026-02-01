@@ -110,7 +110,7 @@ export default function About() {
               }
             ].map((value) => (
               <div key={value.title} className="text-center">
-                <value.icon className="w-12 h-12 mx-auto mb-4 text-accent" />
+                <value.icon className="w-12 h-12 mx-auto mb-4 text-black" />
                 <h3 className={cn(
                   "font-display text-lg font-semibold mb-2",
                   "text-foreground"
@@ -151,7 +151,7 @@ export default function About() {
               { name: "Kwame Asante", role: "Education & Programs Director" }
             ].map((member) => (
               <div key={member.name} className="text-center p-6 rounded-lg bg-secondary/30">
-                <div className="bg-gradient-to-br from-accent/20 to-accent/10 h-32 rounded-lg mb-4" />
+                <div className="bg-gradient-to-br from-black/10 to-black/5 h-32 rounded-lg mb-4" />
                 <h3 className={cn(
                   "font-display text-lg font-semibold mb-1",
                   "text-foreground"
