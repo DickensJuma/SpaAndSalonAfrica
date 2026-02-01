@@ -9,7 +9,7 @@ export default function Magazine() {
       "Discover the key systems that allow African salon, spa & barbershop owners to work on the business, not in it.",
     image: "https://images.unsplash.com/photo-1658092967527-4e140d9bdaea?q=80&w=2070&auto=format&fit=crop",
     author: "Amara Okafor",
-    date: "March 15, 2025",
+    date: "March 15, 2026",
     category: "Business Tips"
   };
 
@@ -21,7 +21,7 @@ export default function Magazine() {
         "A simple weekly content plan to stay visible online and attract ideal clients.",
       image: "https://images.unsplash.com/photo-1652095319417-4bf8a0de1a3d?q=80&w=927&auto=format&fit=crop",
       author: "Zainab Hassan",
-      date: "March 12, 2025",
+      date: "March 12, 2026",
       category: "Marketing",
       readTime: "5 min read"
     },
@@ -32,7 +32,7 @@ export default function Magazine() {
         "How to charge what you’re worth while staying competitive in your local market.",
       image: "https://images.unsplash.com/photo-1761233585177-73b12a61ea4d?q=80&w=986&auto=format&fit=crop",
       author: "Kwame Asante",
-      date: "March 10, 2025",
+      date: "March 10, 2026",
       category: "Revenue",
       readTime: "6 min read"
     },
@@ -43,7 +43,7 @@ export default function Magazine() {
         "Practical advice for recruiting, onboarding and retaining staff who grow with you.",
       image: "https://images.unsplash.com/photo-1688302583595-5482083f6843?q=80&w=1543&auto=format&fit=crop",
       author: "Dr. Naledi Mvubu",
-      date: "March 8, 2025",
+      date: "March 8, 2026",
       category: "Team",
       readTime: "7 min read"
     },
@@ -54,7 +54,7 @@ export default function Magazine() {
         "Turn your salon, spa or barbershop into a local love brand clients proudly recommend.",
       image: "https://plus.unsplash.com/premium_photo-1729702169709-87c1e287a2a5?q=80&w=2070&auto=format&fit=crop",
       author: "Fatima Diallo",
-      date: "March 5, 2025",
+      date: "March 5, 2026",
       category: "Branding",
       readTime: "8 min read"
     },
@@ -65,7 +65,7 @@ export default function Magazine() {
         "Simple financial habits to manage cash flow, profit and growth without an accounting degree.",
       image: "https://images.unsplash.com/photo-1740501813766-067394db5b64?q=80&w=2070&auto=format&fit=crop",
       author: "Prof. Kwesi Mensah",
-      date: "March 1, 2025",
+      date: "March 1, 2026",
       category: "Finance",
       readTime: "9 min read"
     },
@@ -76,7 +76,7 @@ export default function Magazine() {
         "Lessons from African owners who successfully opened second and third branches.",
       image: "https://images.unsplash.com/photo-1765607476252-19010772800e?q=80&w=1065&auto=format&fit=crop",
       author: "Kwame Asante",
-      date: "February 28, 2025",
+      date: "February 28, 2026",
       category: "Growth",
       readTime: "6 min read"
     }
@@ -113,7 +113,7 @@ export default function Magazine() {
               <p className="text-sm text-foreground/50 uppercase tracking-widest">
                 Latest Issue
               </p>
-              <p className="text-4xl font-bold text-black">March 2025</p>
+              <p className="text-4xl font-bold text-black">March 2026</p>
             </div>
           </div>
         </div>
@@ -304,7 +304,7 @@ export default function Magazine() {
         "py-12 px-4 sm:px-6 lg:px-8"
       )}>
         <div className="max-w-7xl mx-auto text-center text-sm text-foreground/50">
-          <p>&copy; 2025 Spa &amp; Salon African Magazine. All rights reserved.</p>
+          <p>&copy; 2026 Spa &amp; Salon African Magazine. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -229,7 +229,7 @@ export default function Services() {
         "py-12 px-4 sm:px-6 lg:px-8"
       )}>
         <div className="max-w-7xl mx-auto text-center text-sm text-foreground/50">
-          <p>&copy; 2025 Spa & Salon Africa. All rights reserved.</p>
+          <p>&copy; 2026 Spa & Salon Africa. All rights reserved.</p>
         </div>
       </footer>
     </div>

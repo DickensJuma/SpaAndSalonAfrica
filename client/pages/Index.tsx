@@ -68,7 +68,7 @@ export default function Index() {
       image: "https://images.unsplash.com/photo-1658092967527-4e140d9bdaea?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "Business Tips",
       author: "Amara Okafor",
-      date: "March 15, 2025",
+      date: "March 15, 2026",
       featured: true,
     },
     {
@@ -78,7 +78,7 @@ export default function Index() {
       image: "https://images.unsplash.com/photo-1553276738-5a611037a82c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "Marketing",
       author: "Zainab Hassan",
-      date: "March 12, 2025",
+      date: "March 12, 2026",
     },
     {
       id: "3",
@@ -87,7 +87,7 @@ export default function Index() {
       image: "https://images.unsplash.com/photo-1761233585177-73b12a61ea4d?q=80&w=986&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "Leadership",
       author: "Kwame Asante",
-      date: "March 10, 2025",
+      date: "March 10, 2026",
     },
     {
       id: "4",
@@ -96,7 +96,7 @@ export default function Index() {
       image: "https://images.unsplash.com/photo-1688302583595-5482083f6843?q=80&w=1543&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "Growth",
       author: "Dr. Naledi Mvubu",
-      date: "March 8, 2025",
+      date: "March 8, 2026",
     },
     {
       id: "5",
@@ -105,7 +105,7 @@ export default function Index() {
       image: "https://plus.unsplash.com/premium_photo-1729702169709-87c1e287a2a5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "Branding",
       author: "Fatima Diallo",
-      date: "March 5, 2025",
+      date: "March 5, 2026",
     },
     {
       id: "6",
@@ -114,7 +114,7 @@ export default function Index() {
       image: "https://images.unsplash.com/photo-1740501813766-067394db5b64?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       category: "Revenue",
       author: "Prof. Kwesi Mensah",
-      date: "March 1, 2025",
+      date: "March 1, 2026",
     },
   ];
 
@@ -418,7 +418,7 @@ export default function Index() {
             "flex flex-col md:flex-row justify-between items-center gap-4"
           )}>
             <p className="text-sm text-foreground/50">
-              &copy; 2025 Spa &amp; Salon African. All rights reserved.
+              &copy; 2026 Spa &amp; Salon African. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               <a href="#" className="text-foreground/50 hover:text-foreground transition-colors">
