@@ -5,6 +5,7 @@ import { connectDatabase } from "./db/connection";
 import { handleDemo } from "./routes/demo";
 import { handleContact } from "./routes/contact";
 import { handleEventRegistration, handlePaymentVerification } from "./routes/events";
+import { handleServiceInquiry } from "./routes/services";
 
 export async function createServer() {
   const app = express();
@@ -36,6 +37,9 @@ export async function createServer() {
   // Event registration endpoints
   app.post("/api/events/register", handleEventRegistration);
   app.post("/api/events/verify-payment", handlePaymentVerification);
+
+  // Service inquiry endpoint
+  app.post("/api/services/inquiry", handleServiceInquiry);
 
   return app;
 }

@@ -62,3 +62,21 @@ export interface PaymentVerificationResponse {
   status?: "success" | "failed" | "pending";
   amount?: number;
 }
+
+/**
+ * Service Inquiry Types
+ */
+export interface ServiceInquiryRequest {
+  serviceName: string;
+  serviceCategory?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  businessName?: string;
+  message?: string;
+}
+
+export interface ServiceInquiryResponse {
+  success: boolean;
+  message: string;
+}

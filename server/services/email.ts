@@ -276,6 +276,122 @@ class EmailService {
       throw error;
     }
   }
+
+  /**
+   * Send service inquiry notification to admin
+   */
+  async sendServiceInquiryNotification(data: {
+    serviceName: string;
+    serviceCategory?: string;
+    name: string;
+    email: string;
+    phone?: string;
+    businessName?: string;
+    message?: string;
+  }): Promise<void> {
+    if (!this.apiInstance) {
+      console.log("📧 [Email Service Disabled] Service inquiry notification would be sent:", data);
+      return;
+    }
+
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL || "admin@spaandsalonafrica.com";
+
+      const emailData: SendSmtpEmail = {
+        subject: `New Service Inquiry: ${data.serviceName}`,
+        sender: this.sender,
+        to: [{ email: adminEmail }],
+        htmlContent: `
+        <h2>New Service Inquiry</h2>
+        <p><strong>Service:</strong> ${data.serviceName}</p>
+        ${data.serviceCategory ? `<p><strong>Category:</strong> ${data.serviceCategory}</p>` : ""}
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ""}
+        ${data.businessName ? `<p><strong>Business:</strong> ${data.businessName}</p>` : ""}
+        ${data.message ? `<p><strong>Message:</strong><br>${data.message.replace(/\n/g, "<br>")}</p>` : ""}
+      `,
+        textContent: `
+        New Service Inquiry
+        Service: ${data.serviceName}
+        ${data.serviceCategory ? `Category: ${data.serviceCategory}` : ""}
+        Name: ${data.name}
+        Email: ${data.email}
+        ${data.phone ? `Phone: ${data.phone}` : ""}
+        ${data.businessName ? `Business: ${data.businessName}` : ""}
+        ${data.message ? `Message: ${data.message}` : ""}
+      `,
+      };
+
+      // Brevo v3: API key should be set via setApiKey or passed in options
+      // Try to set it on the instance first
+      try {
+        if (typeof (this.apiInstance as any).setApiKey === 'function') {
+          (this.apiInstance as any).setApiKey(0, this.apiKey);
+        }
+      } catch (e) {
+        // Ignore if setApiKey doesn't exist
+      }
+      await this.apiInstance.sendTransacEmail(emailData);
+      console.log("✅ Service inquiry notification email sent");
+    } catch (error) {
+      console.error("❌ Error sending service inquiry notification email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send service inquiry confirmation to user
+   */
+  async sendServiceInquiryConfirmation(data: {
+    name: string;
+    email: string;
+    serviceName: string;
+  }): Promise<void> {
+    if (!this.apiInstance) {
+      console.log("📧 [Email Service Disabled] Service inquiry confirmation would be sent to:", data.email);
+      return;
+    }
+
+    try {
+      const emailData: SendSmtpEmail = {
+        subject: `Thank you for your interest in ${data.serviceName}`,
+        sender: this.sender,
+        to: [{ email: data.email, name: data.name }],
+        htmlContent: `
+        <h2>Thank you for your interest, ${data.name}!</h2>
+        <p>We've received your inquiry about <strong>${data.serviceName}</strong> and our team will get back to you within 24 hours.</p>
+        <p>We're excited to help you grow your beauty business!</p>
+        <p>Best regards,<br>The Spa & Salon Africa Team</p>
+      `,
+        textContent: `
+        Thank you for your interest, ${data.name}!
+        
+        We've received your inquiry about ${data.serviceName} and our team will get back to you within 24 hours.
+        
+        We're excited to help you grow your beauty business!
+        
+        Best regards,
+        The Spa & Salon Africa Team
+      `,
+      };
+
+      // Brevo v3: API key should be set via setApiKey or passed in options
+      // Try to set it on the instance first
+      try {
+        if (typeof (this.apiInstance as any).setApiKey === 'function') {
+          (this.apiInstance as any).setApiKey(0, this.apiKey);
+        }
+      } catch (e) {
+        // Ignore if setApiKey doesn't exist
+      }
+      await this.apiInstance.sendTransacEmail(emailData);
+      console.log("✅ Service inquiry confirmation email sent");
+    } catch (error) {
+      console.error("❌ Error sending service inquiry confirmation email:", error);
+      throw error;
+    }
+  }
 }
 
 // Lazy-loaded singleton instance
@@ -298,4 +414,8 @@ export const emailService = {
     getEmailService().sendEventRegistrationConfirmation(data),
   sendEventRegistrationNotification: (data: Parameters<EmailService["sendEventRegistrationNotification"]>[0]) => 
     getEmailService().sendEventRegistrationNotification(data),
+  sendServiceInquiryNotification: (data: Parameters<EmailService["sendServiceInquiryNotification"]>[0]) => 
+    getEmailService().sendServiceInquiryNotification(data),
+  sendServiceInquiryConfirmation: (data: Parameters<EmailService["sendServiceInquiryConfirmation"]>[0]) => 
+    getEmailService().sendServiceInquiryConfirmation(data),
 };

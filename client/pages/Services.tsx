@@ -1,8 +1,147 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
 import { Sparkles, Scissors, Droplet, Wind } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ServiceInquiryRequest, ServiceInquiryResponse } from "@shared/api";
 
 export default function Services() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<{
+    name: string;
+    category?: string;
+  } | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    businessName: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const handleOpenModal = (serviceName: string, category?: string) => {
+    setSelectedService({ name: serviceName, category });
+    setIsModalOpen(true);
+    setSubmitStatus({ type: null, message: "" });
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      businessName: "",
+      message: "",
+    });
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedService(null);
+    setSubmitStatus({ type: null, message: "" });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!selectedService) return;
+
+    // Validate required fields
+    if (!formData.name || !formData.email) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please fill in all required fields.",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please enter a valid email address.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const requestData: ServiceInquiryRequest = {
+        serviceName: selectedService.name,
+        serviceCategory: selectedService.category,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        businessName: formData.businessName || undefined,
+        message: formData.message || undefined,
+      };
+
+      const response = await fetch("/api/services/inquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      const data: ServiceInquiryResponse = await response.json();
+
+      if (data.success) {
+        setSubmitStatus({
+          type: "success",
+          message: data.message,
+        });
+        // Reset form after successful submission
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          businessName: "",
+          message: "",
+        });
+        // Close modal after 2 seconds
+        setTimeout(() => {
+          handleCloseModal();
+        }, 2000);
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: data.message || "An error occurred. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting service inquiry:", error);
+      setSubmitStatus({
+        type: "error",
+        message: "An error occurred. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const services = [
     {
       category: "Business Coaching",
@@ -124,11 +263,14 @@ export default function Services() {
 
                   {/* CTA Button */}
                   <div className="p-4 bg-secondary/20">
-                    <button className={cn(
-                      "w-full px-4 py-2 rounded-sm font-semibold",
-                      "bg-black text-white hover:bg-black/90",
-                      "transition-colors duration-200 text-sm"
-                    )}>
+                    <button
+                      onClick={() => handleOpenModal(service.category, service.category)}
+                      className={cn(
+                        "w-full px-4 py-2 rounded-sm font-semibold",
+                        "bg-black text-white hover:bg-black/90",
+                        "transition-colors duration-200 text-sm"
+                      )}
+                    >
                       Talk to Our Team
                     </button>
                   </div>
@@ -209,6 +351,7 @@ export default function Services() {
                   ))}
                 </ul>
                 <button
+                  onClick={() => handleOpenModal(pkg.name)}
                   className={cn(
                     "w-full px-4 py-2 rounded-sm font-semibold",
                     "bg-black text-white hover:bg-black/90",
@@ -232,6 +375,133 @@ export default function Services() {
           <p>&copy; 2026 Spa & Salon Africa. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Service Inquiry Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-display">
+              {selectedService?.category
+                ? `Talk to Our Team - ${selectedService.name}`
+                : `Request More Details - ${selectedService?.name}`}
+            </DialogTitle>
+            <DialogDescription>
+              Fill out the form below and our team will get back to you within 24 hours.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-medium text-foreground">
+                Name <span className="text-destructive">*</span>
+              </label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your full name"
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium text-foreground">
+                Email <span className="text-destructive">*</span>
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="your.email@example.com"
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="phone" className="text-sm font-medium text-foreground">
+                Phone
+              </label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="+254 700 000 000"
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="businessName" className="text-sm font-medium text-foreground">
+                Business Name
+              </label>
+              <Input
+                id="businessName"
+                name="businessName"
+                type="text"
+                value={formData.businessName}
+                onChange={handleChange}
+                placeholder="Your business name (optional)"
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="message" className="text-sm font-medium text-foreground">
+                Message
+              </label>
+              <Textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell us more about your needs or questions..."
+                rows={4}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {submitStatus.type && (
+              <div
+                className={cn(
+                  "p-3 rounded-md text-sm",
+                  submitStatus.type === "success"
+                    ? "bg-green-50 text-green-800 border border-green-200"
+                    : "bg-red-50 text-red-800 border border-red-200"
+                )}
+              >
+                {submitStatus.message}
+              </div>
+            )}
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCloseModal}
+                disabled={isSubmitting}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 bg-black text-white hover:bg-black/90"
+              >
+                {isSubmitting ? "Submitting..." : "Submit Inquiry"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
