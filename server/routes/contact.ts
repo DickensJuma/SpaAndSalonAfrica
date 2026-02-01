@@ -28,15 +28,24 @@ export const handleContact: RequestHandler = async (req, res) => {
       } as ContactFormResponse);
     }
 
-    // Save to database
-    const contact = new Contact({
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-      subject: body.subject,
-      message: body.message,
-    });
-    await contact.save();
+    // Save to database (if connected)
+    try {
+      const contact = new Contact({
+        name: body.name,
+        email: body.email,
+        phone: body.phone,
+        subject: body.subject,
+        message: body.message,
+      });
+      await contact.save();
+    } catch (dbError: any) {
+      // If database is not connected, log but continue
+      if (dbError.name === "MongoServerError" || dbError.message?.includes("Mongo")) {
+        console.warn("⚠️  Database not available, skipping save:", dbError.message);
+      } else {
+        throw dbError;
+      }
+    }
 
     // Send emails asynchronously (don't wait for them to complete)
     Promise.all([
