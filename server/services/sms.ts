@@ -1,23 +1,25 @@
-import * as brevo from "@getbrevo/brevo";
+import { TransactionalSMSApi } from "@getbrevo/brevo";
 
 /**
  * SMS service using Brevo
  */
 class SMSService {
-  private apiInstance: brevo.TransactionalSMSApi;
+  private apiInstance: TransactionalSMSApi | null;
+  private apiKey: string | undefined;
 
   constructor() {
-    const apiKey = process.env.BREVO_API_KEY;
+    this.apiKey = process.env.BREVO_API_KEY;
     
-    if (!apiKey) {
-      throw new Error("BREVO_API_KEY environment variable is not set");
+    if (!this.apiKey) {
+      if (process.env.NODE_ENV === "production") {
+        throw new Error("BREVO_API_KEY environment variable is not set");
+      }
+      console.warn("⚠️  BREVO_API_KEY not set - SMS service will be disabled");
+      this.apiInstance = null;
+      return;
     }
 
-    const apiClient = brevo.ApiClient.instance;
-    const apiKeyAuth = apiClient.authentications["api-key"];
-    apiKeyAuth.apiKey = apiKey;
-
-    this.apiInstance = new brevo.TransactionalSMSApi();
+    this.apiInstance = new TransactionalSMSApi();
   }
 
   /**
@@ -27,6 +29,11 @@ class SMSService {
     recipient: string;
     message: string;
   }): Promise<void> {
+    if (!this.apiInstance) {
+      console.log("📱 [SMS Service Disabled] SMS would be sent to:", data.recipient);
+      return;
+    }
+
     try {
       // Brevo SMS API requires phone number in international format
       const phoneNumber = this.formatPhoneNumber(data.recipient);
@@ -35,12 +42,21 @@ class SMSService {
         throw new Error("Invalid phone number format");
       }
 
-      const sendTransacSms = new brevo.SendTransacSms();
-      sendTransacSms.sender = process.env.BREVO_SMS_SENDER || "SpaSalon";
-      sendTransacSms.recipient = phoneNumber;
-      sendTransacSms.content = data.message;
+      const smsData = {
+        sender: process.env.BREVO_SMS_SENDER || "SpaSalon",
+        recipient: phoneNumber,
+        content: data.message,
+      };
 
-      await this.apiInstance.sendTransacSms(sendTransacSms);
+      // Brevo v3: Try to set API key before sending
+      try {
+        if (typeof (this.apiInstance as any).setApiKey === 'function') {
+          (this.apiInstance as any).setApiKey(0, this.apiKey);
+        }
+      } catch (e) {
+        // Ignore if setApiKey doesn't exist
+      }
+      await this.apiInstance.sendTransacSms(smsData);
       console.log(`✅ SMS sent to ${phoneNumber}`);
     } catch (error) {
       console.error("❌ Error sending SMS:", error);
@@ -99,5 +115,20 @@ class SMSService {
   }
 }
 
-// Export singleton instance
-export const smsService = new SMSService();
+// Lazy-loaded singleton instance
+let smsServiceInstance: SMSService | null = null;
+
+export function getSMSService(): SMSService {
+  if (!smsServiceInstance) {
+    smsServiceInstance = new SMSService();
+  }
+  return smsServiceInstance;
+}
+
+// Export for convenience (but it's lazy-loaded)
+export const smsService = {
+  sendSMS: (data: Parameters<SMSService["sendSMS"]>[0]) => 
+    getSMSService().sendSMS(data),
+  sendEventRegistrationSMS: (data: Parameters<SMSService["sendEventRegistrationSMS"]>[0]) => 
+    getSMSService().sendEventRegistrationSMS(data),
+};

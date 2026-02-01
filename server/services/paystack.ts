@@ -10,7 +10,12 @@ class PaystackService {
     const secretKey = process.env.PAYSTACK_SECRET_KEY;
     
     if (!secretKey) {
-      throw new Error("PAYSTACK_SECRET_KEY environment variable is not set");
+      if (process.env.NODE_ENV === "production") {
+        throw new Error("PAYSTACK_SECRET_KEY environment variable is not set");
+      }
+      console.warn("⚠️  PAYSTACK_SECRET_KEY not set - payment service will be disabled");
+      this.paystack = null as any;
+      return;
     }
 
     this.paystack = Paystack(secretKey);
@@ -31,6 +36,10 @@ class PaystackService {
     accessCode: string;
     reference: string;
   }> {
+    if (!this.paystack) {
+      throw new Error("Paystack service is not configured. Please set PAYSTACK_SECRET_KEY in your environment variables.");
+    }
+
     try {
       const response = await this.paystack.transaction.initialize({
         email: data.email,
@@ -68,6 +77,10 @@ class PaystackService {
     };
     metadata?: Record<string, any>;
   }> {
+    if (!this.paystack) {
+      throw new Error("Paystack service is not configured. Please set PAYSTACK_SECRET_KEY in your environment variables.");
+    }
+
     try {
       const response = await this.paystack.transaction.verify(reference);
 
@@ -100,5 +113,22 @@ class PaystackService {
   }
 }
 
-// Export singleton instance
-export const paystackService = new PaystackService();
+// Lazy-loaded singleton instance
+let paystackServiceInstance: PaystackService | null = null;
+
+export function getPaystackService(): PaystackService {
+  if (!paystackServiceInstance) {
+    paystackServiceInstance = new PaystackService();
+  }
+  return paystackServiceInstance;
+}
+
+// Export for convenience (but it's lazy-loaded)
+export const paystackService = {
+  initializePayment: (data: Parameters<PaystackService["initializePayment"]>[0]) => 
+    getPaystackService().initializePayment(data),
+  verifyPayment: (reference: string) => 
+    getPaystackService().verifyPayment(reference),
+  convertToKobo: (amount: number) => 
+    getPaystackService().convertToKobo(amount),
+};

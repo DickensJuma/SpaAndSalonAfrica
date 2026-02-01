@@ -67,6 +67,7 @@ const EventRegistrationSchema = new Schema<IEventRegistration>(
       required: true,
       unique: true,
       trim: true,
+      index: true,
     },
   },
   {
@@ -76,7 +77,7 @@ const EventRegistrationSchema = new Schema<IEventRegistration>(
 
 // Indexes for faster queries
 EventRegistrationSchema.index({ eventId: 1, email: 1 });
-EventRegistrationSchema.index({ registrationId: 1 });
+// registrationId already has unique: true which creates an index, so we don't need to add it again
 EventRegistrationSchema.index({ paymentReference: 1 });
 
 export const EventRegistration = mongoose.model<IEventRegistration>(

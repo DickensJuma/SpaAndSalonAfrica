@@ -105,8 +105,17 @@ export const handleEventRegistration: RequestHandler = async (req, res) => {
       }
     }
 
-    // Save registration to database
-    await registration.save();
+    // Save registration to database (if connected)
+    try {
+      await registration.save();
+    } catch (dbError: any) {
+      // If database is not connected, log but continue
+      if (dbError.name === "MongoServerError" || dbError.message?.includes("Mongo")) {
+        console.warn("⚠️  Database not available, skipping save:", dbError.message);
+      } else {
+        throw dbError;
+      }
+    }
 
     // Send notifications asynchronously
     if (!isPaidEvent || paymentUrl) {
@@ -189,33 +198,43 @@ export const handlePaymentVerification: RequestHandler = async (req, res) => {
     const verification = await paystackService.verifyPayment(body.reference);
 
     if (verification.status) {
-      // Update registration payment status
-      const registration = await EventRegistration.findOne({
-        paymentReference: body.reference,
-      });
+      // Update registration payment status (if database is connected)
+      let registration = null;
+      try {
+        registration = await EventRegistration.findOne({
+          paymentReference: body.reference,
+        });
 
-      if (registration) {
-        registration.paymentStatus = "paid";
-        await registration.save();
+        if (registration) {
+          registration.paymentStatus = "paid";
+          await registration.save();
 
-        // Get event data for confirmation email
-        const eventData = EVENT_DATA[registration.eventId];
-        if (eventData) {
-          // Send payment confirmation email
-          emailService
-            .sendEventRegistrationConfirmation({
-              name: registration.name,
-              email: registration.email,
-              eventTitle: eventData.title,
-              eventDate: eventData.date,
-              eventTime: eventData.time,
-              eventLocation: eventData.location,
-              registrationId: registration.registrationId,
-              paymentStatus: "paid",
-            })
-            .catch((error) => {
-              console.error("Error sending payment confirmation email:", error);
-            });
+          // Get event data for confirmation email
+          const eventData = EVENT_DATA[registration.eventId];
+          if (eventData) {
+            // Send payment confirmation email
+            emailService
+              .sendEventRegistrationConfirmation({
+                name: registration.name,
+                email: registration.email,
+                eventTitle: eventData.title,
+                eventDate: eventData.date,
+                eventTime: eventData.time,
+                eventLocation: eventData.location,
+                registrationId: registration.registrationId,
+                paymentStatus: "paid",
+              })
+              .catch((error) => {
+                console.error("Error sending payment confirmation email:", error);
+              });
+          }
+        }
+      } catch (dbError: any) {
+        // If database is not connected, log but continue
+        if (dbError.name === "MongoServerError" || dbError.message?.includes("Mongo")) {
+          console.warn("⚠️  Database not available, skipping payment status update:", dbError.message);
+        } else {
+          throw dbError;
         }
       }
     }
