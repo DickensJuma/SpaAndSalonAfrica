@@ -168,7 +168,7 @@ export default function Events() {
     {
       id: 1,
       title: "Salon Profitability Bootcamp",
-      date: "April 15, 2025",
+      date: "April 15, 2026",
       time: "2:00 PM - 5:00 PM",
       location: "Spa & Salon Africa - Main Studio",
       attendees: 25,
@@ -177,7 +177,7 @@ export default function Events() {
     {
       id: 2,
       title: "Owner Networking Mixer",
-      date: "April 22, 2025",
+      date: "April 22, 2026",
       time: "6:00 PM - 8:00 PM",
       location: "Spa & Salon Africa - Lounge",
       attendees: 40,
@@ -186,7 +186,7 @@ export default function Events() {
     {
       id: 3,
       title: "Marketing Made Simple for Salons",
-      date: "May 5, 2025",
+      date: "May 5, 2026",
       time: "3:00 PM - 5:30 PM",
       location: "Spa & Salon Africa - Main Studio",
       attendees: 30,
@@ -195,7 +195,7 @@ export default function Events() {
     {
       id: 4,
       title: "Systems & Staff Workshop",
-      date: "May 12, 2025",
+      date: "May 12, 2026",
       time: "2:00 PM - 4:00 PM",
       location: "Spa & Salon Africa - Conference Room",
       attendees: 20,
@@ -204,7 +204,7 @@ export default function Events() {
     {
       id: 5,
       title: "Salon & Spa Expansion Clinic",
-      date: "May 20, 2025",
+      date: "May 20, 2026",
       time: "10:00 AM - 6:00 PM",
       location: "Spa & Salon Africa - Wellness Center",
       attendees: 100,
@@ -213,7 +213,7 @@ export default function Events() {
     {
       id: 6,
       title: "Business Club Owners Gala",
-      date: "June 1, 2025",
+      date: "June 1, 2026",
       time: "7:00 PM - 10:00 PM",
       location: "Spa & Salon Africa - Premium Lounge",
       attendees: 50,
@@ -551,7 +551,7 @@ export default function Events() {
         "py-12 px-4 sm:px-6 lg:px-8"
       )}>
         <div className="max-w-7xl mx-auto text-center text-sm text-foreground/50">
-          <p>&copy; 2025 Spa & Salon Africa. All rights reserved.</p>
+          <p>&copy; 2026 Spa & Salon Africa. All rights reserved.</p>
         </div>
       </footer>
     </div>

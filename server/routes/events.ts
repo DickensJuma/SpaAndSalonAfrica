@@ -7,17 +7,17 @@ import {
 } from "@shared/api";
 import { EventRegistration } from "../db/models/EventRegistration";
 import { emailService } from "../services/email";
-import { smsService } from "../services/sms";
+// import { smsService } from "../services/sms"; // Commented out - will be used later
 import { paystackService } from "../services/paystack";
 
 // Mock event data - in production, this would come from a database
 const EVENT_DATA: Record<number, { title: string; date: string; time: string; location: string; amount?: number }> = {
-  1: { title: "Salon Profitability Bootcamp", date: "April 15, 2025", time: "2:00 PM - 5:00 PM", location: "Spa & Salon Africa - Main Studio", amount: 5000 },
-  2: { title: "Owner Networking Mixer", date: "April 22, 2025", time: "6:00 PM - 8:00 PM", location: "Spa & Salon Africa - Lounge" },
-  3: { title: "Marketing Made Simple for Salons", date: "May 5, 2025", time: "3:00 PM - 5:30 PM", location: "Spa & Salon Africa - Main Studio", amount: 3000 },
-  4: { title: "Systems & Staff Workshop", date: "May 12, 2025", time: "2:00 PM - 4:00 PM", location: "Spa & Salon Africa - Conference Room", amount: 4000 },
-  5: { title: "Salon & Spa Expansion Clinic", date: "May 20, 2025", time: "10:00 AM - 6:00 PM", location: "Spa & Salon Africa - Wellness Center", amount: 10000 },
-  6: { title: "Business Club Owners Gala", date: "June 1, 2025", time: "7:00 PM - 10:00 PM", location: "Spa & Salon Africa - Premium Lounge", amount: 15000 },
+  1: { title: "Salon Profitability Bootcamp", date: "April 15, 2026", time: "2:00 PM - 5:00 PM", location: "Spa & Salon Africa - Main Studio", amount: 5000 },
+  2: { title: "Owner Networking Mixer", date: "April 22, 2026", time: "6:00 PM - 8:00 PM", location: "Spa & Salon Africa - Lounge" },
+  3: { title: "Marketing Made Simple for Salons", date: "May 5, 2026", time: "3:00 PM - 5:30 PM", location: "Spa & Salon Africa - Main Studio", amount: 3000 },
+  4: { title: "Systems & Staff Workshop", date: "May 12, 2026", time: "2:00 PM - 4:00 PM", location: "Spa & Salon Africa - Conference Room", amount: 4000 },
+  5: { title: "Salon & Spa Expansion Clinic", date: "May 20, 2026", time: "10:00 AM - 6:00 PM", location: "Spa & Salon Africa - Wellness Center", amount: 10000 },
+  6: { title: "Business Club Owners Gala", date: "June 1, 2026", time: "7:00 PM - 10:00 PM", location: "Spa & Salon Africa - Premium Lounge", amount: 15000 },
 };
 
 /**
@@ -139,18 +139,18 @@ export const handleEventRegistration: RequestHandler = async (req, res) => {
           eventTitle: eventData.title,
           registrationId,
         }),
-        // Send SMS if phone is provided
-        body.phone
-          ? smsService.sendEventRegistrationSMS({
-              phone: body.phone,
-              name: body.name,
-              eventTitle: eventData.title,
-              eventDate: eventData.date,
-              registrationId,
-            }).catch((error) => {
-              console.error("Error sending SMS:", error);
-            })
-          : Promise.resolve(),
+        // SMS sending commented out - will be used later
+        // body.phone
+        //   ? smsService.sendEventRegistrationSMS({
+        //       phone: body.phone,
+        //       name: body.name,
+        //       eventTitle: eventData.title,
+        //       eventDate: eventData.date,
+        //       registrationId,
+        //     }).catch((error) => {
+        //       console.error("Error sending SMS:", error);
+        //     })
+        //   : Promise.resolve(),
       ]).catch((error) => {
         console.error("Error sending notifications:", error);
         // Don't fail the request if notifications fail
