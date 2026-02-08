@@ -63,7 +63,7 @@ export default function HeroSection({
       alt: "Salon owner reviewing plans",
       title: "Grow Your Beauty Business",
       description: "Clarity, systems and community for salon, spa & barbershop owners in Africa.",
-      author: "Spa & Salon African",
+      author: "Spa & Salon Africa",
     },
     {
       src: "https://images.unsplash.com/photo-1562322503-54d46c5ee97f?w=500&h=300&fit=crop",
@@ -91,7 +91,7 @@ export default function HeroSection({
       alt: "Owners networking at an event",
       title: "Community Across Africa",
       description: "Learn, share and grow with other ambitious beauty entrepreneurs.",
-      author: "Spa & Salon African Community",
+      author: "Spa & Salon Africa Community",
     },
   ],
   height = "h-[500px] md:h-[700px] lg:h-[800px]",

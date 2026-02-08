@@ -1,5 +1,5 @@
 /**
- * Index - Spa & Salon African Business Hub
+ * Index - Spa & Salon Africa Business Hub
  *
  * A modern hub for salon, spa & barbershop owners in Africa featuring:
  * - Hero section showcasing entrepreneurial stories and shop interiors
@@ -59,7 +59,7 @@ export default function Index() {
     },
   ];
 
-  // Sample article data - Spa & Salon African Business content
+  // Sample article data - Spa & Salon Africa Business content
   const articles: Article[] = [
     {
       id: "1",
@@ -140,7 +140,7 @@ export default function Index() {
       {/* Ads Banner */}
       <AdsBanner
         title="Grow Your Salon, Spa & Barbershop Business"
-        description="Join Spa & Salon African for practical business tools, marketing ideas and community support across the continent."
+        description="Join Spa & Salon Africa for practical business tools, marketing ideas and community support across the continent."
         ctaText="Get Growth Resources"
       />
 
@@ -178,7 +178,7 @@ export default function Index() {
                 )}
               >
             Ready to grow your beauty business or partner with Spa &amp;
-                Salon African? Reach out and our team will respond as soon as
+                Salon Africa? Reach out and our team will respond as soon as
                 possible.
               </p>
 
@@ -339,7 +339,7 @@ export default function Index() {
             {/* Brand Column */}
             <div>
               <h3 className="font-display text-lg font-semibold text-foreground mb-4">
-                Spa &amp; Salon African
+                Spa &amp; Salon Africa
               </h3>
               <p className="text-sm text-foreground/60 leading-relaxed">
                 Your trusted hub for business tips, marketing ideas, growth strategies and community for African salon, spa &amp; barbershop owners.
@@ -418,7 +418,7 @@ export default function Index() {
             "flex flex-col md:flex-row justify-between items-center gap-4"
           )}>
             <p className="text-sm text-foreground/50">
-              &copy; 2026 Spa &amp; Salon African. All rights reserved.
+              &copy; 2026 Spa &amp; Salon Africa. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               <a href="#" className="text-foreground/50 hover:text-foreground transition-colors">

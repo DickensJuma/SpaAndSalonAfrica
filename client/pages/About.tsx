@@ -14,7 +14,7 @@ export default function About() {
             "font-display text-5xl md:text-6xl font-bold mb-6",
             "text-foreground"
           )}>
-            About Spa &amp; Salon African
+            About Spa &amp; Salon Africa
           </h1>
           <p
             className={cn(
@@ -47,7 +47,7 @@ export default function About() {
                   "font-light leading-relaxed"
                 )}
               >
-                Spa &amp; Salon African was created for the people who keep the
+                Spa &amp; Salon Africa was created for the people who keep the
                 continent looking and feeling good: salon, spa &amp; barbershop
                 owners and their teams.
               </p>

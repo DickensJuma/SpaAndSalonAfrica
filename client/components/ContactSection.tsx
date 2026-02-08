@@ -111,9 +111,9 @@ export function ContactSection() {
                     Address
                   </h3>
                   <p className="text-foreground/60 font-light">
-                    123 Beauty Lane<br />
-                    Salon District<br />
-                    Africa, SA 12345
+                  Kabarsiran Avenue<br />
+                  P.O Box 12474 - 00100 <br />
+                  Nairobi, Kenya
                   </p>
                 </div>
               </div>
@@ -131,9 +131,8 @@ export function ContactSection() {
                     Phone
                   </h3>
                   <p className="text-foreground/60 font-light">
-                    +1 (555) 123-4567
-                    <br />
-                    +1 (555) 123-4568
+                  0753 337722
+                    
                   </p>
                 </div>
               </div>
@@ -151,9 +150,7 @@ export function ContactSection() {
                     Email
                   </h3>
                   <p className="text-foreground/60 font-light">
-                    hello@spaandsalonafrica.com
-                    <br />
-                    bookings@spaandsalonafrica.com
+                  letsconnect@spaandsalonafrica.com
                   </p>
                 </div>
               </div>
@@ -171,11 +168,11 @@ export function ContactSection() {
                     Business Hours
                   </h3>
                   <p className="text-foreground/60 font-light">
-                    Monday - Friday: 9:00 AM - 7:00 PM
+                    Monday - Friday: 9:00 AM - 5:00 PM
                     <br />
-                    Saturday: 10:00 AM - 6:00 PM
+                    Saturday: 9:00 AM - 1:00 PM
                     <br />
-                    Sunday: 11:00 AM - 5:00 PM
+                    Sunday: Closed
                   </p>
                 </div>
               </div>
@@ -262,6 +259,7 @@ export function ContactSection() {
                   Subject
                 </label>
                 <select
+                  title="Subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}

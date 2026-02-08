@@ -67,7 +67,7 @@ export default function Navigation(_props: NavigationProps = {}) {
           {/* Right: CTA Button */}
           <div className="flex justify-end">
             <Link
-              to="/business-club"
+              to="/business-club-questionnaire"
               className="px-6 py-2 bg-black text-white uppercase text-sm font-semibold tracking-wider hover:bg-black/90 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
             >
               Join our business club
@@ -86,7 +86,7 @@ export default function Navigation(_props: NavigationProps = {}) {
           </div>
           <div className="flex justify-center">
             <Link
-              to="/business-club"
+              to="/business-club-questionnaire"
               className="px-6 py-2 bg-black text-white uppercase text-xs font-semibold tracking-wider hover:bg-black/90 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
             >
               Join our business club

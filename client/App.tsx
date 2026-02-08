@@ -13,6 +13,7 @@ import Events from "./pages/Events";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import BusinessClubQuestionnaire from "./pages/BusinessClubQuestionnaire";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/business-club-questionnaire" element={<BusinessClubQuestionnaire />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

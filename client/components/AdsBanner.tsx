@@ -25,7 +25,7 @@ interface AdsBannerProps {
 
 export default function AdsBanner({
   title = "Grow Your Salon, Spa & Barbershop Business",
-  description = "Get practical business tips, marketing ideas and growth strategies from Spa & Salon African.",
+  description = "Get practical business tips, marketing ideas and growth strategies from Spa & Salon Africa.",
   ctaText = "Get Resources",
   onCtaClick,
   backgroundColor = "bg-secondary/80",

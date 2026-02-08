@@ -34,7 +34,7 @@ export default function Contact() {
           <div className="rounded-lg overflow-hidden border border-border">
             <div className="aspect-video w-full">
               <iframe
-                title="Spa & Salon African - Westlands, Nairobi"
+                title="Spa & Salon Africa - Westlands, Nairobi"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.848799495342!2d36.80220781526116!3d-1.2685355359666414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f173fd0e2ff2d%3A0x8f3cfc3d9fc1c2b5!2sWestlands%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1700000000000"
                 width="100%"
                 height="100%"

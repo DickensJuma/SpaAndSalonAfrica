@@ -97,7 +97,7 @@ export default function Magazine() {
                   "text-foreground"
                 )}
               >
-                Spa &amp; Salon African Magazine
+                Spa &amp; Salon Africa Magazine
               </h1>
               <p
                 className={cn(
@@ -304,7 +304,7 @@ export default function Magazine() {
         "py-12 px-4 sm:px-6 lg:px-8"
       )}>
         <div className="max-w-7xl mx-auto text-center text-sm text-foreground/50">
-          <p>&copy; 2026 Spa &amp; Salon African Magazine. All rights reserved.</p>
+          <p>&copy; 2026 Spa &amp; Salon Africa Magazine. All rights reserved.</p>
         </div>
       </footer>
     </div>

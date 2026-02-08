@@ -2,13 +2,148 @@ import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
 import { ContactSection } from "@/components/ContactSection";
 import MarketingBanner from "@/components/MarketingBanner";
-import { Sparkles, Scissors, Droplet, Users, ArrowRight, Star } from "lucide-react";
+import { Sparkles, Scissors, Droplet, Users, ArrowRight, Star, Calendar, Clock, Video, X, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+
+interface WebinarRegistrationData {
+  name: string;
+  businessName: string;
+  phone: string;
+  email: string;
+  questions: string;
+}
 
 export default function Landing() {
+  const [isWebinarModalOpen, setIsWebinarModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const [registrationData, setRegistrationData] = useState<WebinarRegistrationData>({
+    name: "",
+    businessName: "",
+    phone: "",
+    email: "",
+    questions: "",
+  });
+
+  const handleOpenWebinarModal = () => {
+    setIsWebinarModalOpen(true);
+    setSubmitStatus({ type: null, message: "" });
+    setRegistrationData({
+      name: "",
+      businessName: "",
+      phone: "",
+      email: "",
+      questions: "",
+    });
+  };
+
+  const handleCloseWebinarModal = () => {
+    setIsWebinarModalOpen(false);
+    setSubmitStatus({ type: null, message: "" });
+  };
+
+  const handleRegistrationChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRegistrationData({
+      ...registrationData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleWebinarSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/webinar/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registrationData),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.paymentUrl) {
+        // Redirect to Paystack payment page
+        window.location.href = data.paymentUrl;
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: data.message || "Failed to register. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting webinar registration:", error);
+      setSubmitStatus({
+        type: "error",
+        message: "An error occurred. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
+
+      {/* Webinar Event Banner */}
+      <section className="bg-gradient-to-r from-black via-black/95 to-black/90 text-white py-6 px-4 sm:px-6 lg:px-8 border-b-4 border-white/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4 flex-1">
+              <div className="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                <Video className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+                    Live Webinar
+                  </span>
+                  <span className="text-white/80 text-sm font-light">March 15, 2026</span>
+                </div>
+                <h3 className="font-display text-xl md:text-2xl font-bold mb-1">
+                  Scaling Your Salon: From Survival to 7 Figures
+                </h3>
+                <p className="text-white/70 text-sm md:text-base font-light">
+                  Join leading salon owners & business experts for actionable growth strategies
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="text-center sm:text-right">
+                <div className="flex items-center gap-2 text-white/90 mb-1">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-sm font-light">3:00 PM - 5:30 PM EAT</span>
+                </div>
+                <div className="text-2xl font-bold">KSh 2,500</div>
+                <div className="text-xs text-white/60 font-light">Limited spots available</div>
+              </div>
+              <button
+                onClick={handleOpenWebinarModal}
+                className={cn(
+                  "px-8 py-4 rounded-sm font-bold text-base whitespace-nowrap",
+                  "bg-white text-black hover:bg-white/90",
+                  "transition-all duration-300 hover:scale-105 hover:shadow-2xl",
+                  "active:scale-95"
+                )}
+              >
+                Buy Ticket
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Hero Section */}
       <section className="py-24 md:py-40 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black/5 to-transparent">
@@ -24,7 +159,7 @@ export default function Landing() {
                     "hover:bg-black/20 transition-colors duration-200"
                   )}
                 >
-                  Spa &amp; Salon African
+                  Spa &amp; Salon Africa
                 </span>
               </div>
 
@@ -217,7 +352,7 @@ export default function Landing() {
                   "text-foreground tracking-tight"
                 )}
               >
-                Why Spa &amp; Salon African?
+                Why Spa &amp; Salon Africa?
               </h2>
 
               <div className="space-y-8">
@@ -307,7 +442,7 @@ export default function Landing() {
               {
                 name: "Amara Okafor",
                 role: "Spa Director, Nairobi",
-                text: "Being part of this community means I never feel like I’m building alone. The workshops and support are priceless.",
+                text: "Being part of this community means I never feel like I'm building alone. The workshops and support are priceless.",
                 rating: 5
               }
             ].map((testimonial) => (
@@ -371,7 +506,7 @@ export default function Landing() {
             "font-light leading-relaxed"
           )}>
             Take the next step toward a stronger, more profitable salon, spa or
-            barbershop with the support of Spa &amp; Salon African.
+            barbershop with the support of Spa &amp; Salon Africa.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
@@ -403,6 +538,231 @@ export default function Landing() {
 
       {/* Contact Section (Home, with full form) */}
       <ContactSection />
+
+      {/* Webinar Registration Modal */}
+      {isWebinarModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={handleCloseWebinarModal}
+        >
+          <div
+            className={cn(
+              "bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto",
+              "border-2 border-black/10"
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-black to-black/95 text-white px-6 py-5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Video className="w-6 h-6" />
+                <div>
+                  <h3 className="font-display text-2xl font-bold">
+                    Webinar Registration
+                  </h3>
+                  <p className="text-sm text-white/70 mt-1">
+                    March 15, 2026 • 3:00 PM - 5:30 PM EAT
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleCloseWebinarModal}
+                className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-sm transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <form onSubmit={handleWebinarSubmit} className="p-6 space-y-6">
+              {/* Event Info Banner */}
+              <div className="bg-black/5 border-l-4 border-black p-4 rounded-sm">
+                <h4 className="font-bold text-foreground mb-2">
+                  Scaling Your Salon: From Survival to 7 Figures
+                </h4>
+                <p className="text-sm text-foreground/70 font-light">
+                  Join leading salon owners & business experts for actionable growth strategies
+                </p>
+                <div className="mt-3 flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-2 text-foreground/60">
+                    <Calendar className="w-4 h-4" />
+                    <span>March 15, 2026</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-foreground/60">
+                    <Clock className="w-4 h-4" />
+                    <span>3:00 PM - 5:30 PM EAT</span>
+                  </div>
+                </div>
+                <div className="mt-3 text-2xl font-bold text-black">
+                  KSh 2,500
+                </div>
+              </div>
+
+              {/* Status Message */}
+              {submitStatus.type && (
+                <div
+                  className={cn(
+                    "p-4 rounded-sm text-sm",
+                    submitStatus.type === "success"
+                      ? "bg-black/10 text-black border border-black/20"
+                      : "bg-red-50 text-red-700 border border-red-200"
+                  )}
+                >
+                  {submitStatus.message}
+                </div>
+              )}
+
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={registrationData.name}
+                  onChange={handleRegistrationChange}
+                  required
+                  className={cn(
+                    "w-full px-4 py-3 rounded-sm",
+                    "bg-secondary border-2 border-border",
+                    "text-foreground placeholder:text-foreground/50",
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                  )}
+                  placeholder="Your full name"
+                />
+              </div>
+
+              {/* Business Name */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Name of Business <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="businessName"
+                  value={registrationData.businessName}
+                  onChange={handleRegistrationChange}
+                  required
+                  className={cn(
+                    "w-full px-4 py-3 rounded-sm",
+                    "bg-secondary border-2 border-border",
+                    "text-foreground placeholder:text-foreground/50",
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                  )}
+                  placeholder="Your salon, spa or barbershop name"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={registrationData.phone}
+                  onChange={handleRegistrationChange}
+                  required
+                  className={cn(
+                    "w-full px-4 py-3 rounded-sm",
+                    "bg-secondary border-2 border-border",
+                    "text-foreground placeholder:text-foreground/50",
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                  )}
+                  placeholder="+254 712 345 678"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={registrationData.email}
+                  onChange={handleRegistrationChange}
+                  required
+                  className={cn(
+                    "w-full px-4 py-3 rounded-sm",
+                    "bg-secondary border-2 border-border",
+                    "text-foreground placeholder:text-foreground/50",
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                  )}
+                  placeholder="you@example.com"
+                />
+              </div>
+
+              {/* Questions for Speakers */}
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Any questions for the keynote speakers?
+                </label>
+                <textarea
+                  name="questions"
+                  value={registrationData.questions}
+                  onChange={handleRegistrationChange}
+                  rows={4}
+                  className={cn(
+                    "w-full px-4 py-3 rounded-sm resize-none",
+                    "bg-secondary border-2 border-border",
+                    "text-foreground placeholder:text-foreground/50",
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                  )}
+                  placeholder="What would you like to see addressed during the webinar?"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={handleCloseWebinarModal}
+                  className={cn(
+                    "flex-1 px-6 py-4 rounded-sm font-semibold",
+                    "bg-secondary text-foreground border-2 border-border",
+                    "hover:bg-secondary/80 transition-colors duration-200"
+                  )}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={cn(
+                    "flex-1 px-6 py-4 rounded-sm font-semibold",
+                    "bg-black text-white hover:bg-black/90",
+                    "transition-all duration-200",
+                    "disabled:opacity-50 disabled:cursor-not-allowed",
+                    "flex items-center justify-center gap-2"
+                  )}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      Proceed to Payment
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Payment Info */}
+              <div className="text-xs text-foreground/60 text-center pt-2 border-t border-border">
+                You will be redirected to Paystack to complete your payment securely
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className={cn(
