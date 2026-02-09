@@ -47,4 +47,4 @@ const ContactSchema = new Schema<IContact>(
 // Index for faster queries
 ContactSchema.index({ email: 1, createdAt: -1 });
 
-export const Contact = mongoose.model<IContact>("Contact", ContactSchema);
+export const Contact = mongoose.models.Contact || mongoose.model<IContact>("Contact", ContactSchema);

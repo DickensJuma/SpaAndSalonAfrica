@@ -13,7 +13,7 @@ export async function createServer() {
 
   // Connect to database
   try {
-    await connectDatabase();
+    await connectDatabase(); // Temporarily disabled for testing
   } catch (error) {
     console.error("Failed to connect to database:", error);
     // Continue anyway - some features may not work without DB
@@ -51,7 +51,7 @@ export async function createServer() {
 }
 
 // Start server on port 8081 if this file is run directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   createServer().then(app => {
     app.listen(8081, () => {
       console.log("🚀 Backend server running on http://localhost:8081");

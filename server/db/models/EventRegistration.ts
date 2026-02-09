@@ -80,7 +80,7 @@ EventRegistrationSchema.index({ eventId: 1, email: 1 });
 // registrationId already has unique: true which creates an index, so we don't need to add it again
 EventRegistrationSchema.index({ paymentReference: 1 });
 
-export const EventRegistration = mongoose.model<IEventRegistration>(
+export const EventRegistration = mongoose.models.EventRegistration || mongoose.model<IEventRegistration>(
   "EventRegistration",
   EventRegistrationSchema
 );

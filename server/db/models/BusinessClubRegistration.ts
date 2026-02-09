@@ -120,7 +120,7 @@ BusinessClubRegistrationSchema.index({ email: 1 });
 BusinessClubRegistrationSchema.index({ businessType: 1 });
 // registrationId already has unique: true which creates an index
 
-export const BusinessClubRegistration = mongoose.model<IBusinessClubRegistration>(
+export const BusinessClubRegistration = mongoose.models.BusinessClubRegistration || mongoose.model<IBusinessClubRegistration>(
     "BusinessClubRegistration",
     BusinessClubRegistrationSchema
 );

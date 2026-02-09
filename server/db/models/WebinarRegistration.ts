@@ -78,7 +78,7 @@ const WebinarRegistrationSchema = new Schema<IWebinarRegistration>(
 WebinarRegistrationSchema.index({ email: 1 });
 // registrationId already has unique: true which creates an index
 
-export const WebinarRegistration = mongoose.model<IWebinarRegistration>(
+export const WebinarRegistration = mongoose.models.WebinarRegistration || mongoose.model<IWebinarRegistration>(
     "WebinarRegistration",
     WebinarRegistrationSchema
 );
