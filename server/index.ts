@@ -49,3 +49,12 @@ export async function createServer() {
 
   return app;
 }
+
+// Start server on port 8081 if this file is run directly
+if (require.main === module) {
+  createServer().then(app => {
+    app.listen(8081, () => {
+      console.log("🚀 Backend server running on http://localhost:8081");
+    });
+  });
+}
