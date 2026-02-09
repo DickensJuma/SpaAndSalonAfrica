@@ -1,8 +1,20 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index"
+      "source": "/api/business-club/register",
+      "destination": "/api/business-club/register"
+    },
+    {
+      "source": "/api/webinar/register",
+      "destination": "/api/webinar/register"
+    },
+    {
+      "source": "/api/webinar/verify-payment",
+      "destination": "/api/webinar/verify-payment"
+    },
+    {
+      "source": "/api/contact",
+      "destination": "/api/contact"
     },
     {
       "source": "/(.*)",
