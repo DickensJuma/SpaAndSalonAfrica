@@ -2,10 +2,11 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { connectDatabase } from "./db/connection";
-import { handleDemo } from "./routes/demo";
-import { handleContact } from "./routes/contact";
-import { handleEventRegistration, handlePaymentVerification } from "./routes/events";
-import { handleServiceInquiry } from "./routes/services";
+import { ContactController } from "./controllers/contact.controller";
+import { EventsController } from "./controllers/events.controller";
+import { ServicesController } from "./controllers/services.controller";
+import { WebinarController } from "./controllers/webinar.controller";
+import { BusinessClubController } from "./controllers/business-club.controller";
 
 export async function createServer() {
   const app = express();
@@ -29,17 +30,22 @@ export async function createServer() {
     res.json({ message: ping });
   });
 
-  app.get("/api/demo", handleDemo);
-
   // Contact form endpoint
-  app.post("/api/contact", handleContact);
+  app.post("/api/contact", ContactController.submitContact);
 
   // Event registration endpoints
-  app.post("/api/events/register", handleEventRegistration);
-  app.post("/api/events/verify-payment", handlePaymentVerification);
+  app.post("/api/events/register", EventsController.register);
+  app.post("/api/events/verify-payment", EventsController.verifyPayment);
 
   // Service inquiry endpoint
-  app.post("/api/services/inquiry", handleServiceInquiry);
+  app.post("/api/services/inquiry", ServicesController.submitInquiry);
+
+  // Webinar registration endpoints
+  app.post("/api/webinar/register", WebinarController.register);
+  app.post("/api/webinar/verify-payment", WebinarController.verifyPayment);
+
+  // Business club registration endpoint
+  app.post("/api/business-club/register", BusinessClubController.register);
 
   return app;
 }

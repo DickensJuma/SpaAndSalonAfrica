@@ -1,34 +1,45 @@
-import { TransactionalEmailsApi, SendSmtpEmail, SendSmtpEmailSender } from "@getbrevo/brevo";
+import * as nodemailer from "nodemailer";
 
 /**
- * Email service using Brevo (formerly Sendinblue)
+ * Email service using Nodemailer with SMTP
  */
 class EmailService {
-  private apiInstance: TransactionalEmailsApi | null;
-  private sender: SendSmtpEmailSender;
-  private apiKey: string | undefined;
+  private transporter: nodemailer.Transporter | null;
+  private sender: {
+    name: string;
+    email: string;
+  };
 
   constructor() {
-    this.apiKey = process.env.BREVO_API_KEY;
-    
-    if (!this.apiKey) {
-      // Only throw in production or when actually trying to use the service
-      // During dev/build, we'll allow it to be missing
-      if (process.env.NODE_ENV === "production") {
-        throw new Error("BREVO_API_KEY environment variable is not set");
-      }
-      // In development, we'll create a mock service that logs instead
-      console.warn("⚠️  BREVO_API_KEY not set - email service will be disabled");
-      this.apiInstance = null;
-    } else {
-      // Brevo v3: Create API instance - API key will be passed in requests
-      this.apiInstance = new TransactionalEmailsApi();
-    }
-    
     this.sender = {
-      name: process.env.BREVO_SENDER_NAME || "Spa & Salon Africa",
-      email: process.env.BREVO_SENDER_EMAIL || "noreply@spaandsalonafrica.com",
+      name: "Spark",
+      email: process.env.SENDER_EMAIL || "noreply@spaandsalonafrica.com",
     };
+
+    // Initialize SMTP transporter
+    const smtpConfig = {
+      host: process.env.MAIL_HOST || "smtp-relay.brevo.com",
+      port: parseInt(process.env.MAIL_PORT || "587"),
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_PASSWORD,
+      },
+    };
+
+    // Check if SMTP credentials are available
+    if (!smtpConfig.auth.user || !smtpConfig.auth.pass) {
+      console.warn("⚠️  SMTP credentials not set - email service will be disabled");
+      this.transporter = null;
+    } else {
+      try {
+        this.transporter = nodemailer.createTransport(smtpConfig);
+        console.log("✅ Email service initialized with SMTP");
+      } catch (error) {
+        console.error("❌ Failed to initialize email transporter:", error);
+        this.transporter = null;
+      }
+    }
   }
 
   /**
@@ -41,7 +52,7 @@ class EmailService {
     subject: string;
     message: string;
   }): Promise<void> {
-    if (!this.apiInstance) {
+    if (!this.transporter) {
       console.log("📧 [Email Service Disabled] Contact notification would be sent:", data);
       return;
     }
@@ -49,11 +60,11 @@ class EmailService {
     try {
       const adminEmail = process.env.ADMIN_EMAIL || "admin@spaandsalonafrica.com";
 
-      const emailData: SendSmtpEmail = {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: adminEmail,
         subject: `New Contact Form Submission: ${data.subject}`,
-        sender: this.sender,
-        to: [{ email: adminEmail }],
-        htmlContent: `
+        html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${data.name}</p>
         <p><strong>Email:</strong> ${data.email}</p>
@@ -62,7 +73,7 @@ class EmailService {
         <p><strong>Message:</strong></p>
         <p>${data.message.replace(/\n/g, "<br>")}</p>
       `,
-        textContent: `
+        text: `
         New Contact Form Submission
         Name: ${data.name}
         Email: ${data.email}
@@ -70,18 +81,7 @@ class EmailService {
         Subject: ${data.subject}
         Message: ${data.message}
       `,
-      };
-
-      // Brevo v3: API key should be set via setApiKey or passed in options
-      // Try to set it on the instance first
-      try {
-        if (typeof (this.apiInstance as any).setApiKey === 'function') {
-          (this.apiInstance as any).setApiKey(0, this.apiKey);
-        }
-      } catch (e) {
-        // Ignore if setApiKey doesn't exist
-      }
-      await this.apiInstance.sendTransacEmail(emailData);
+      });
       console.log("✅ Contact notification email sent");
     } catch (error) {
       console.error("❌ Error sending contact notification email:", error);
@@ -96,23 +96,23 @@ class EmailService {
     name: string;
     email: string;
   }): Promise<void> {
-    if (!this.apiInstance) {
+    if (!this.transporter) {
       console.log("📧 [Email Service Disabled] Contact confirmation would be sent to:", data.email);
       return;
     }
 
     try {
-      const emailData: SendSmtpEmail = {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: `${data.name} <${data.email}>`,
         subject: "Thank you for contacting Spa & Salon Africa",
-        sender: this.sender,
-        to: [{ email: data.email, name: data.name }],
-        htmlContent: `
+        html: `
         <h2>Thank you for reaching out, ${data.name}!</h2>
         <p>We've received your message and will get back to you within 24-48 hours.</p>
         <p>Our team is committed to helping beauty business owners across Africa grow and succeed.</p>
         <p>Best regards,<br>The Spa & Salon Africa Team</p>
       `,
-        textContent: `
+        text: `
         Thank you for reaching out, ${data.name}!
         
         We've received your message and will get back to you within 24-48 hours.
@@ -122,18 +122,7 @@ class EmailService {
         Best regards,
         The Spa & Salon Africa Team
       `,
-      };
-
-      // Brevo v3: API key should be set via setApiKey or passed in options
-      // Try to set it on the instance first
-      try {
-        if (typeof (this.apiInstance as any).setApiKey === 'function') {
-          (this.apiInstance as any).setApiKey(0, this.apiKey);
-        }
-      } catch (e) {
-        // Ignore if setApiKey doesn't exist
-      }
-      await this.apiInstance.sendTransacEmail(emailData);
+      });
       console.log("✅ Contact confirmation email sent");
     } catch (error) {
       console.error("❌ Error sending contact confirmation email:", error);
@@ -154,17 +143,17 @@ class EmailService {
     registrationId: string;
     paymentStatus?: string;
   }): Promise<void> {
-    if (!this.apiInstance) {
+    if (!this.transporter) {
       console.log("📧 [Email Service Disabled] Event registration confirmation would be sent to:", data.email);
       return;
     }
 
     try {
-      const emailData: SendSmtpEmail = {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: `${data.name} <${data.email}>`,
         subject: `Event Registration Confirmed: ${data.eventTitle}`,
-        sender: this.sender,
-        to: [{ email: data.email, name: data.name }],
-        htmlContent: `
+        html: `
         <h2>Registration Confirmed!</h2>
         <p>Hi ${data.name},</p>
         <p>Your registration for <strong>${data.eventTitle}</strong> has been confirmed.</p>
@@ -179,7 +168,7 @@ class EmailService {
         <p>We look forward to seeing you at the event!</p>
         <p>Best regards,<br>The Spa & Salon Africa Team</p>
       `,
-        textContent: `
+        text: `
         Registration Confirmed!
         
         Hi ${data.name},
@@ -198,18 +187,7 @@ class EmailService {
         Best regards,
         The Spa & Salon Africa Team
       `,
-      };
-
-      // Brevo v3: API key should be set via setApiKey or passed in options
-      // Try to set it on the instance first
-      try {
-        if (typeof (this.apiInstance as any).setApiKey === 'function') {
-          (this.apiInstance as any).setApiKey(0, this.apiKey);
-        }
-      } catch (e) {
-        // Ignore if setApiKey doesn't exist
-      }
-      await this.apiInstance.sendTransacEmail(emailData);
+      });
       console.log("✅ Event registration confirmation email sent");
     } catch (error) {
       console.error("❌ Error sending event registration confirmation email:", error);
@@ -228,7 +206,7 @@ class EmailService {
     eventTitle: string;
     registrationId: string;
   }): Promise<void> {
-    if (!this.apiInstance) {
+    if (!this.transporter) {
       console.log("📧 [Email Service Disabled] Event registration notification would be sent:", data);
       return;
     }
@@ -236,11 +214,11 @@ class EmailService {
     try {
       const adminEmail = process.env.ADMIN_EMAIL || "admin@spaandsalonafrica.com";
 
-      const emailData: SendSmtpEmail = {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: adminEmail,
         subject: `New Event Registration: ${data.eventTitle}`,
-        sender: this.sender,
-        to: [{ email: adminEmail }],
-        htmlContent: `
+        html: `
         <h2>New Event Registration</h2>
         <p><strong>Event:</strong> ${data.eventTitle}</p>
         <p><strong>Name:</strong> ${data.name}</p>
@@ -249,7 +227,7 @@ class EmailService {
         ${data.businessName ? `<p><strong>Business:</strong> ${data.businessName}</p>` : ""}
         <p><strong>Registration ID:</strong> ${data.registrationId}</p>
       `,
-        textContent: `
+        text: `
         New Event Registration
         Event: ${data.eventTitle}
         Name: ${data.name}
@@ -258,18 +236,7 @@ class EmailService {
         ${data.businessName ? `Business: ${data.businessName}` : ""}
         Registration ID: ${data.registrationId}
       `,
-      };
-
-      // Brevo v3: API key should be set via setApiKey or passed in options
-      // Try to set it on the instance first
-      try {
-        if (typeof (this.apiInstance as any).setApiKey === 'function') {
-          (this.apiInstance as any).setApiKey(0, this.apiKey);
-        }
-      } catch (e) {
-        // Ignore if setApiKey doesn't exist
-      }
-      await this.apiInstance.sendTransacEmail(emailData);
+      });
       console.log("✅ Event registration notification email sent");
     } catch (error) {
       console.error("❌ Error sending event registration notification email:", error);
@@ -289,7 +256,7 @@ class EmailService {
     businessName?: string;
     message?: string;
   }): Promise<void> {
-    if (!this.apiInstance) {
+    if (!this.transporter) {
       console.log("📧 [Email Service Disabled] Service inquiry notification would be sent:", data);
       return;
     }
@@ -297,11 +264,11 @@ class EmailService {
     try {
       const adminEmail = process.env.ADMIN_EMAIL || "admin@spaandsalonafrica.com";
 
-      const emailData: SendSmtpEmail = {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: adminEmail,
         subject: `New Service Inquiry: ${data.serviceName}`,
-        sender: this.sender,
-        to: [{ email: adminEmail }],
-        htmlContent: `
+        html: `
         <h2>New Service Inquiry</h2>
         <p><strong>Service:</strong> ${data.serviceName}</p>
         ${data.serviceCategory ? `<p><strong>Category:</strong> ${data.serviceCategory}</p>` : ""}
@@ -311,7 +278,7 @@ class EmailService {
         ${data.businessName ? `<p><strong>Business:</strong> ${data.businessName}</p>` : ""}
         ${data.message ? `<p><strong>Message:</strong><br>${data.message.replace(/\n/g, "<br>")}</p>` : ""}
       `,
-        textContent: `
+        text: `
         New Service Inquiry
         Service: ${data.serviceName}
         ${data.serviceCategory ? `Category: ${data.serviceCategory}` : ""}
@@ -321,18 +288,7 @@ class EmailService {
         ${data.businessName ? `Business: ${data.businessName}` : ""}
         ${data.message ? `Message: ${data.message}` : ""}
       `,
-      };
-
-      // Brevo v3: API key should be set via setApiKey or passed in options
-      // Try to set it on the instance first
-      try {
-        if (typeof (this.apiInstance as any).setApiKey === 'function') {
-          (this.apiInstance as any).setApiKey(0, this.apiKey);
-        }
-      } catch (e) {
-        // Ignore if setApiKey doesn't exist
-      }
-      await this.apiInstance.sendTransacEmail(emailData);
+      });
       console.log("✅ Service inquiry notification email sent");
     } catch (error) {
       console.error("❌ Error sending service inquiry notification email:", error);
@@ -348,23 +304,23 @@ class EmailService {
     email: string;
     serviceName: string;
   }): Promise<void> {
-    if (!this.apiInstance) {
+    if (!this.transporter) {
       console.log("📧 [Email Service Disabled] Service inquiry confirmation would be sent to:", data.email);
       return;
     }
 
     try {
-      const emailData: SendSmtpEmail = {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: `${data.name} <${data.email}>`,
         subject: `Thank you for your interest in ${data.serviceName}`,
-        sender: this.sender,
-        to: [{ email: data.email, name: data.name }],
-        htmlContent: `
+        html: `
         <h2>Thank you for your interest, ${data.name}!</h2>
         <p>We've received your inquiry about <strong>${data.serviceName}</strong> and our team will get back to you within 24 hours.</p>
         <p>We're excited to help you grow your beauty business!</p>
         <p>Best regards,<br>The Spa & Salon Africa Team</p>
       `,
-        textContent: `
+        text: `
         Thank you for your interest, ${data.name}!
         
         We've received your inquiry about ${data.serviceName} and our team will get back to you within 24 hours.
@@ -374,21 +330,354 @@ class EmailService {
         Best regards,
         The Spa & Salon Africa Team
       `,
-      };
-
-      // Brevo v3: API key should be set via setApiKey or passed in options
-      // Try to set it on the instance first
-      try {
-        if (typeof (this.apiInstance as any).setApiKey === 'function') {
-          (this.apiInstance as any).setApiKey(0, this.apiKey);
-        }
-      } catch (e) {
-        // Ignore if setApiKey doesn't exist
-      }
-      await this.apiInstance.sendTransacEmail(emailData);
+      });
       console.log("✅ Service inquiry confirmation email sent");
     } catch (error) {
       console.error("❌ Error sending service inquiry confirmation email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send webinar registration confirmation to user
+   */
+  async sendWebinarRegistrationConfirmation(data: {
+    name: string;
+    email: string;
+    businessName: string;
+    registrationId: string;
+  }): Promise<void> {
+    if (!this.transporter) {
+      console.log("📧 [Email Service Disabled] Webinar registration confirmation would be sent to:", data.email);
+      return;
+    }
+
+    try {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: `${data.name} <${data.email}>`,
+        subject: "Webinar Registration Confirmed - Scaling Your Salon",
+        html: `
+        <h2>You're Registered! 🎉</h2>
+        <p>Hi ${data.name},</p>
+        <p>Thank you for registering for our webinar <strong>"Scaling Your Salon: From Survival to 7 Figures"</strong>!</p>
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Webinar Details:</h3>
+          <p><strong>Date:</strong> March 15, 2026</p>
+          <p><strong>Time:</strong> 3:00 PM - 5:30 PM EAT</p>
+          <p><strong>Format:</strong> Online Webinar</p>
+          <p><strong>Registration ID:</strong> ${data.registrationId}</p>
+        </div>
+        <p>You'll receive webinar link and access instructions 24 hours before event.</p>
+        <p>Get ready to transform your salon business!</p>
+        <p>Best regards,<br>The Spa & Salon Africa Team</p>
+      `,
+        text: `
+        You're Registered! 🎉
+        
+        Hi ${data.name},
+        
+        Thank you for registering for our webinar "Scaling Your Salon: From Survival to 7 Figures"!
+        
+        Webinar Details:
+        Date: March 15, 2026
+        Time: 3:00 PM - 5:30 PM EAT
+        Format: Online Webinar
+        Registration ID: ${data.registrationId}
+        
+        You'll receive webinar link and access instructions 24 hours before event.
+        
+        Get ready to transform your salon business!
+        
+        Best regards,
+        The Spa & Salon Africa Team
+      `,
+      });
+      console.log("✅ Webinar registration confirmation email sent");
+    } catch (error) {
+      console.error("❌ Error sending webinar registration confirmation email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send webinar registration notification to admin
+   */
+  async sendWebinarRegistrationNotification(data: {
+    name: string;
+    email: string;
+    phone: string;
+    businessName: string;
+    questions?: string;
+    registrationId: string;
+  }): Promise<void> {
+    if (!this.transporter) {
+      console.log("📧 [Email Service Disabled] Webinar registration notification would be sent to admin");
+      return;
+    }
+
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL || "admin@spaandsalonafrica.com";
+
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: adminEmail,
+        subject: `New Webinar Registration: ${data.name}`,
+        html: `
+        <h2>New Webinar Registration! 🎯</h2>
+        <p>A new participant has registered for the "Scaling Your Salon" webinar:</p>
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Participant Details:</h3>
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Business:</strong> ${data.businessName}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Registration ID:</strong> ${data.registrationId}</p>
+          ${data.questions ? `<p><strong>Questions/Topics of Interest:</strong><br>${data.questions.replace(/\n/g, '<br>')}</p>` : ''}
+        </div>
+        <p>This registration is for March 15, 2026 webinar.</p>
+      `,
+        text: `
+        New Webinar Registration! 🎯
+        
+        A new participant has registered for the "Scaling Your Salon" webinar:
+        
+        Participant Details:
+        Name: ${data.name}
+        Business: ${data.businessName}
+        Email: ${data.email}
+        Phone: ${data.phone}
+        Registration ID: ${data.registrationId}
+        ${data.questions ? `Questions/Topics of Interest:\n${data.questions}` : ''}
+        
+        This registration is for March 15, 2026 webinar.
+      `,
+      });
+      console.log("✅ Webinar registration notification email sent to admin");
+    } catch (error) {
+      console.error("❌ Error sending webinar registration notification email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send webinar payment confirmation to user
+   */
+  async sendWebinarPaymentConfirmation(data: {
+    name: string;
+    email: string;
+    businessName: string;
+    registrationId: string;
+    amount: number;
+  }): Promise<void> {
+    if (!this.transporter) {
+      console.log("📧 [Email Service Disabled] Webinar payment confirmation would be sent to:", data.email);
+      return;
+    }
+
+    try {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: `${data.name} <${data.email}>`,
+        subject: "Payment Confirmed - Your Webinar Spot is Secured! 🎉",
+        html: `
+        <h2>Payment Confirmed! 🎉</h2>
+        <p>Hi ${data.name},</p>
+        <p>Thank you! Your payment of <strong>KSh ${data.amount.toLocaleString()}</strong> has been successfully processed.</p>
+        <p>Your spot for webinar <strong>"Scaling Your Salon: From Survival to 7 Figures"</strong> is now confirmed!</p>
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Webinar Details:</h3>
+          <p><strong>Date:</strong> March 15, 2026</p>
+          <p><strong>Time:</strong> 3:00 PM - 5:30 PM EAT</p>
+          <p><strong>Format:</strong> Online Webinar</p>
+          <p><strong>Registration ID:</strong> ${data.registrationId}</p>
+          <p><strong>Amount Paid:</strong> KSh ${data.amount.toLocaleString()}</p>
+        </div>
+        <p>You'll receive webinar link and access instructions 24 hours before event.</p>
+        <p>Get ready to transform your salon business!</p>
+        <p>Best regards,<br>The Spa & Salon Africa Team</p>
+      `,
+        text: `
+        Payment Confirmed! 🎉
+        
+        Hi ${data.name},
+        
+        Thank you! Your payment of KSh ${data.amount.toLocaleString()} has been successfully processed.
+        
+        Your spot for webinar "Scaling Your Salon: From Survival to 7 Figures" is now confirmed!
+        
+        Webinar Details:
+        Date: March 15, 2026
+        Time: 3:00 PM - 5:30 PM EAT
+        Format: Online Webinar
+        Registration ID: ${data.registrationId}
+        Amount Paid: KSh ${data.amount.toLocaleString()}
+        
+        You'll receive webinar link and access instructions 24 hours before event.
+        
+        Get ready to transform your salon business!
+        
+        Best regards,
+        The Spa & Salon Africa Team
+      `,
+      });
+      console.log("✅ Webinar payment confirmation email sent");
+    } catch (error) {
+      console.error("❌ Error sending webinar payment confirmation email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send business club registration confirmation to user
+   */
+  async sendBusinessClubRegistrationConfirmation(data: {
+    name: string;
+    email: string;
+    businessName: string;
+    registrationId: string;
+  }): Promise<void> {
+    if (!this.transporter) {
+      console.log("📧 [Email Service Disabled] Business club registration confirmation would be sent to:", data.email);
+      return;
+    }
+
+    try {
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: `${data.name} <${data.email}>`,
+        subject: "Business Club Application Received - Spa & Salon Africa",
+        html: `
+        <h2>Application Received! 🎉</h2>
+        <p>Hi ${data.name},</p>
+        <p>Thank you for applying to join <strong>Spa & Salon Africa Business Club</strong>!</p>
+        <p>We've received your application for <strong>${data.businessName}</strong> and our team will review it carefully.</p>
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Application Details:</h3>
+          <p><strong>Business:</strong> ${data.businessName}</p>
+          <p><strong>Application ID:</strong> ${data.registrationId}</p>
+        </div>
+        <p>We'll be in touch within 24-48 hours with next steps.</p>
+        <p>We're excited to potentially welcome you to our community of successful salon and spa owners!</p>
+        <p>Best regards,<br>The Spa & Salon Africa Team</p>
+      `,
+        text: `
+        Application Received! 🎉
+        
+        Hi ${data.name},
+        
+        Thank you for applying to join Spa & Salon Africa Business Club!
+        
+        We've received your application for ${data.businessName} and our team will review it carefully.
+        
+        Application Details:
+        Business: ${data.businessName}
+        Application ID: ${data.registrationId}
+        
+        We'll be in touch within 24-48 hours with next steps.
+        
+        We're excited to potentially welcome you to our community of successful salon and spa owners!
+        
+        Best regards,
+        The Spa & Salon Africa Team
+      `,
+      });
+      console.log("✅ Business club registration confirmation email sent");
+    } catch (error) {
+      console.error("❌ Error sending business club registration confirmation email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send business club registration notification to admin
+   */
+  async sendBusinessClubRegistrationNotification(data: {
+    fullName: string;
+    email: string;
+    phone: string;
+    businessName: string;
+    businessType: string;
+    businessLocation: string;
+    yearsInBusiness: string;
+    numberOfEmployees: string;
+    businessRealities: string[];
+    expectations: string;
+    focusAreas: string[];
+    howDidYouHear: string;
+    registrationId: string;
+  }): Promise<void> {
+    if (!this.transporter) {
+      console.log("📧 [Email Service Disabled] Business club registration notification would be sent to admin");
+      return;
+    }
+
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL || "admin@spaandsalonafrica.com";
+
+      await this.transporter.sendMail({
+        from: `"${this.sender.name}" <${this.sender.email}>`,
+        to: adminEmail,
+        subject: `New Business Club Application: ${data.fullName}`,
+        html: `
+        <h2>New Business Club Application! 🎯</h2>
+        <p>A new application has been submitted for Spa & Salon Africa Business Club:</p>
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Applicant Details:</h3>
+          <p><strong>Name:</strong> ${data.fullName}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Business:</strong> ${data.businessName}</p>
+          <p><strong>Business Type:</strong> ${data.businessType}</p>
+          <p><strong>Location:</strong> ${data.businessLocation}</p>
+          <p><strong>Years in Business:</strong> ${data.yearsInBusiness}</p>
+          <p><strong>Number of Employees:</strong> ${data.numberOfEmployees}</p>
+          <p><strong>How they heard:</strong> ${data.howDidYouHear}</p>
+          <p><strong>Application ID:</strong> ${data.registrationId}</p>
+          
+          <h4>Business Realities:</h4>
+          <ul>${data.businessRealities.map(reality => `<li>${reality}</li>`).join('')}</ul>
+          
+          <h4>Focus Areas:</h4>
+          <ul>${data.focusAreas.map(area => `<li>${area}</li>`).join('')}</ul>
+          
+          <h4>Expectations:</h4>
+          <p>${data.expectations.replace(/\n/g, '<br>')}</p>
+        </div>
+        <p>This application requires review and follow-up within 24-48 hours.</p>
+      `,
+        text: `
+        New Business Club Application! 🎯
+        
+        A new application has been submitted for Spa & Salon Africa Business Club:
+        
+        Applicant Details:
+        Name: ${data.fullName}
+        Email: ${data.email}
+        Phone: ${data.phone}
+        Business: ${data.businessName}
+        Business Type: ${data.businessType}
+        Location: ${data.businessLocation}
+        Years in Business: ${data.yearsInBusiness}
+        Number of Employees: ${data.numberOfEmployees}
+        How they heard: ${data.howDidYouHear}
+        Application ID: ${data.registrationId}
+        
+        Business Realities:
+        ${data.businessRealities.map(reality => `- ${reality}`).join('\n')}
+        
+        Focus Areas:
+        ${data.focusAreas.map(area => `- ${area}`).join('\n')}
+        
+        Expectations:
+        ${data.expectations}
+        
+        This application requires review and follow-up within 24-48 hours.
+      `,
+      });
+      console.log("✅ Business club registration notification email sent to admin");
+    } catch (error) {
+      console.error("❌ Error sending business club registration notification email:", error);
       throw error;
     }
   }
@@ -406,16 +695,26 @@ export function getEmailService(): EmailService {
 
 // Export for convenience (but it's lazy-loaded)
 export const emailService = {
-  sendContactNotification: (data: Parameters<EmailService["sendContactNotification"]>[0]) => 
+  sendContactNotification: (data: Parameters<EmailService["sendContactNotification"]>[0]) =>
     getEmailService().sendContactNotification(data),
-  sendContactConfirmation: (data: Parameters<EmailService["sendContactConfirmation"]>[0]) => 
+  sendContactConfirmation: (data: Parameters<EmailService["sendContactConfirmation"]>[0]) =>
     getEmailService().sendContactConfirmation(data),
-  sendEventRegistrationConfirmation: (data: Parameters<EmailService["sendEventRegistrationConfirmation"]>[0]) => 
+  sendEventRegistrationConfirmation: (data: Parameters<EmailService["sendEventRegistrationConfirmation"]>[0]) =>
     getEmailService().sendEventRegistrationConfirmation(data),
-  sendEventRegistrationNotification: (data: Parameters<EmailService["sendEventRegistrationNotification"]>[0]) => 
+  sendEventRegistrationNotification: (data: Parameters<EmailService["sendEventRegistrationNotification"]>[0]) =>
     getEmailService().sendEventRegistrationNotification(data),
-  sendServiceInquiryNotification: (data: Parameters<EmailService["sendServiceInquiryNotification"]>[0]) => 
+  sendServiceInquiryNotification: (data: Parameters<EmailService["sendServiceInquiryNotification"]>[0]) =>
     getEmailService().sendServiceInquiryNotification(data),
-  sendServiceInquiryConfirmation: (data: Parameters<EmailService["sendServiceInquiryConfirmation"]>[0]) => 
+  sendServiceInquiryConfirmation: (data: Parameters<EmailService["sendServiceInquiryConfirmation"]>[0]) =>
     getEmailService().sendServiceInquiryConfirmation(data),
+  sendWebinarRegistrationConfirmation: (data: Parameters<EmailService["sendWebinarRegistrationConfirmation"]>[0]) =>
+    getEmailService().sendWebinarRegistrationConfirmation(data),
+  sendWebinarRegistrationNotification: (data: Parameters<EmailService["sendWebinarRegistrationNotification"]>[0]) =>
+    getEmailService().sendWebinarRegistrationNotification(data),
+  sendWebinarPaymentConfirmation: (data: Parameters<EmailService["sendWebinarPaymentConfirmation"]>[0]) =>
+    getEmailService().sendWebinarPaymentConfirmation(data),
+  sendBusinessClubRegistrationConfirmation: (data: Parameters<EmailService["sendBusinessClubRegistrationConfirmation"]>[0]) =>
+    getEmailService().sendBusinessClubRegistrationConfirmation(data),
+  sendBusinessClubRegistrationNotification: (data: Parameters<EmailService["sendBusinessClubRegistrationNotification"]>[0]) =>
+    getEmailService().sendBusinessClubRegistrationNotification(data),
 };

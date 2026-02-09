@@ -2,8 +2,21 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
-import { Calendar, Clock, MapPin, Users, X, Loader2, ArrowRight, Video } from "lucide-react";
-import { EventRegistrationRequest, EventRegistrationResponse, PaymentVerificationRequest } from "@shared/api";
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  X,
+  Loader2,
+  ArrowRight,
+  Video,
+} from "lucide-react";
+import {
+  EventRegistrationRequest,
+  EventRegistrationResponse,
+  PaymentVerificationRequest,
+} from "@shared/api";
 
 interface Event {
   id: number;
@@ -45,21 +58,23 @@ export default function Events() {
     message: string;
   }>({ type: null, message: "" });
 
-  const [eventRegistrationData, setEventRegistrationData] = useState<EventRegistrationData>({
-    name: "",
-    email: "",
-    phone: "",
-    businessName: "",
-    additionalInfo: "",
-  });
+  const [eventRegistrationData, setEventRegistrationData] =
+    useState<EventRegistrationData>({
+      name: "",
+      email: "",
+      phone: "",
+      businessName: "",
+      additionalInfo: "",
+    });
 
-  const [webinarRegistrationData, setWebinarRegistrationData] = useState<WebinarRegistrationData>({
-    name: "",
-    businessName: "",
-    phone: "",
-    email: "",
-    questions: "",
-  });
+  const [webinarRegistrationData, setWebinarRegistrationData] =
+    useState<WebinarRegistrationData>({
+      name: "",
+      businessName: "",
+      phone: "",
+      email: "",
+      questions: "",
+    });
 
   // Handle payment verification on return from Paystack
   useEffect(() => {
@@ -77,7 +92,8 @@ export default function Events() {
     try {
       const requestBody: PaymentVerificationRequest = { reference };
 
-      const response = await fetch("/api/events/verify-payment", {
+      // Try webinar verification first, fallback to events verification
+      let response = await fetch("/api/webinar/verify-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,31 +101,46 @@ export default function Events() {
         body: JSON.stringify(requestBody),
       });
 
+      // If webinar endpoint fails, try events endpoint
+      if (!response.ok) {
+        response = await fetch("/api/events/verify-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+      }
+
       const data = await response.json();
 
       if (data.success) {
         setSubmitStatus({
           type: "success",
-          message: "Payment confirmed! Your registration is complete. You'll receive a confirmation email shortly.",
+          message:
+            "Payment confirmed! Your registration is complete. You'll receive a confirmation email shortly.",
         });
       } else {
         setSubmitStatus({
           type: "error",
-          message: data.message || "Payment verification failed. Please contact support.",
+          message:
+            data.message ||
+            "Payment verification failed. Please contact support.",
         });
       }
     } catch (error) {
       console.error("Error verifying payment:", error);
       setSubmitStatus({
         type: "error",
-        message: "An error occurred while verifying payment. Please contact support.",
+        message:
+          "An error occurred while verifying payment. Please contact support.",
       });
     }
   };
 
   const handleRegisterClick = (event: Event) => {
     setSelectedEvent(event);
-    
+
     // Check if this is a webinar event (has amount and paymentUrl)
     if (event.amount && event.paymentUrl) {
       setIsWebinarModalOpen(true);
@@ -130,7 +161,7 @@ export default function Events() {
         additionalInfo: "",
       });
     }
-    
+
     setSubmitStatus({ type: null, message: "" });
   };
 
@@ -147,7 +178,7 @@ export default function Events() {
   };
 
   const handleEventRegistrationChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setEventRegistrationData({
       ...eventRegistrationData,
@@ -156,7 +187,7 @@ export default function Events() {
   };
 
   const handleWebinarRegistrationChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setWebinarRegistrationData({
       ...webinarRegistrationData,
@@ -270,7 +301,8 @@ export default function Events() {
       amount: 2500,
       paymentUrl: "https://paystack.com/pay/scaling-your-salon",
       cta: "Buy Ticket",
-      description: "Join leading salon owners & business experts for actionable growth strategies."
+      description:
+        "Join leading salon owners & business experts for actionable growth strategies.",
     },
     {
       id: 2,
@@ -280,7 +312,8 @@ export default function Events() {
       location: "Spa & Salon Africa - Main Studio",
       attendees: 25,
       cta: "Register Now",
-      description: "Understand your numbers, set profitable prices and design packages that work in your market."
+      description:
+        "Understand your numbers, set profitable prices and design packages that work in your market.",
     },
     {
       id: 3,
@@ -290,7 +323,8 @@ export default function Events() {
       location: "Spa & Salon Africa - Lounge",
       attendees: 40,
       cta: "Register Now",
-      description: "Connect with salon, spa & barbershop owners from your city and share real-world strategies."
+      description:
+        "Connect with salon, spa & barbershop owners from your city and share real-world strategies.",
     },
     {
       id: 4,
@@ -300,7 +334,8 @@ export default function Events() {
       location: "Spa & Salon Africa - Main Studio",
       attendees: 30,
       cta: "Register Now",
-      description: "A step-by-step plan to attract and retain ideal clients using social media and referrals."
+      description:
+        "A step-by-step plan to attract and retain ideal clients using social media and referrals.",
     },
   ];
 
@@ -311,16 +346,20 @@ export default function Events() {
       {/* Hero Section */}
       <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className={cn(
-            "font-display text-5xl md:text-6xl font-bold mb-6",
-            "text-foreground"
-          )}>
+          <h1
+            className={cn(
+              "font-display text-5xl md:text-6xl font-bold mb-6",
+              "text-foreground",
+            )}
+          >
             Events for Salon, Spa & Barbershop Owners
           </h1>
-          <p className={cn(
-            "text-foreground/70 text-lg md:text-xl",
-            "font-light max-w-2xl mx-auto"
-          )}>
+          <p
+            className={cn(
+              "text-foreground/70 text-lg md:text-xl",
+              "font-light max-w-2xl mx-auto",
+            )}
+          >
             Join workshops, clinics and networking experiences designed to help
             you grow your beauty business across Africa.
           </p>
@@ -347,10 +386,12 @@ export default function Events() {
                         </span>
                       </div>
                     )}
-                    <h3 className={cn(
-                      "font-display text-2xl font-semibold mb-4",
-                      "text-foreground"
-                    )}>
+                    <h3
+                      className={cn(
+                        "font-display text-2xl font-semibold mb-4",
+                        "text-foreground",
+                      )}
+                    >
                       {event.title}
                     </h3>
                     <p className="text-foreground/70 mb-6 font-light">
@@ -369,11 +410,15 @@ export default function Events() {
                       </div>
                       <div className="flex items-center gap-3 text-foreground/60">
                         <MapPin className="w-5 h-5 text-black flex-shrink-0" />
-                        <span className="text-sm font-light">{event.location}</span>
+                        <span className="text-sm font-light">
+                          {event.location}
+                        </span>
                       </div>
                       <div className="flex items-center gap-3 text-foreground/60">
                         <Users className="w-5 h-5 text-black flex-shrink-0" />
-                        <span className="text-sm font-light">{event.attendees} attendees</span>
+                        <span className="text-sm font-light">
+                          {event.attendees} attendees
+                        </span>
                       </div>
                     </div>
 
@@ -392,7 +437,7 @@ export default function Events() {
                         "px-6 py-3 rounded-sm font-semibold whitespace-nowrap",
                         "bg-black text-white hover:bg-black/90",
                         "transition-all duration-200 hover:scale-105 hover:shadow-lg",
-                        "active:scale-95"
+                        "active:scale-95",
                       )}
                     >
                       {event.cta}
@@ -406,22 +451,19 @@ export default function Events() {
       </section>
 
       {/* Newsletter */}
-      <section className={cn(
-        "py-16 md:py-24 px-4 sm:px-6 lg:px-8",
-        "bg-secondary/50"
-      )}>
+      <section
+        className={cn("py-16 md:py-24 px-4 sm:px-6 lg:px-8", "bg-secondary/50")}
+      >
         <div className="max-w-2xl mx-auto text-center">
           <h2
             className={cn(
               "font-display text-3xl md:text-4xl font-bold mb-4",
-              "text-foreground"
+              "text-foreground",
             )}
           >
             Stay Updated
           </h2>
-          <p className={cn(
-            "text-foreground/70 text-lg mb-8 font-light"
-          )}>
+          <p className={cn("text-foreground/70 text-lg mb-8 font-light")}>
             Subscribe to receive event updates, registration links and exclusive
             invitations for owners and managers.
           </p>
@@ -433,7 +475,7 @@ export default function Events() {
                 "flex-1 px-4 py-3 rounded-sm",
                 "bg-background border border-border",
                 "text-foreground placeholder:text-foreground/50",
-                "focus:outline-none focus:ring-2 focus:ring-black"
+                "focus:outline-none focus:ring-2 focus:ring-black",
               )}
             />
             <button
@@ -441,7 +483,7 @@ export default function Events() {
               className={cn(
                 "px-6 py-3 rounded-sm font-semibold",
                 "bg-black text-white hover:bg-black/90",
-                "transition-colors duration-200"
+                "transition-colors duration-200",
               )}
             >
               Subscribe
@@ -459,17 +501,19 @@ export default function Events() {
           <div
             className={cn(
               "bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto",
-              "border-2 border-black/10"
+              "border-2 border-black/10",
             )}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-black/10 px-6 py-4 flex items-center justify-between">
               <div>
-                <h3 className={cn(
-                  "font-display text-2xl font-bold",
-                  "text-foreground"
-                )}>
+                <h3
+                  className={cn(
+                    "font-display text-2xl font-bold",
+                    "text-foreground",
+                  )}
+                >
                   {selectedEvent.cta} for {selectedEvent.title}
                 </h3>
                 <p className="text-sm text-foreground/60 mt-1">
@@ -486,7 +530,10 @@ export default function Events() {
             </div>
 
             {/* Modal Content */}
-            <form onSubmit={handleEventRegistrationSubmit} className="p-6 space-y-6">
+            <form
+              onSubmit={handleEventRegistrationSubmit}
+              className="p-6 space-y-6"
+            >
               {/* Status Message */}
               {submitStatus.type && (
                 <div
@@ -494,7 +541,7 @@ export default function Events() {
                     "p-4 rounded-sm text-sm",
                     submitStatus.type === "success"
                       ? "bg-black/10 text-black border border-black/20"
-                      : "bg-red-50 text-red-700 border border-red-200"
+                      : "bg-red-50 text-red-700 border border-red-200",
                   )}
                 >
                   {submitStatus.message}
@@ -516,7 +563,7 @@ export default function Events() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black",
                   )}
                   placeholder="Your full name"
                 />
@@ -537,7 +584,7 @@ export default function Events() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black",
                   )}
                   placeholder="you@example.com"
                 />
@@ -557,7 +604,7 @@ export default function Events() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black",
                   )}
                   placeholder="+254 712 345 678"
                 />
@@ -577,7 +624,7 @@ export default function Events() {
                     "w-full px-4 py-2 rounded-sm",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black",
                   )}
                   placeholder="Your salon, spa or barbershop name"
                 />
@@ -597,7 +644,7 @@ export default function Events() {
                     "w-full px-4 py-2 rounded-sm resize-none",
                     "bg-secondary border border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black",
                   )}
                   placeholder="Any questions or special requirements?"
                 />
@@ -611,7 +658,7 @@ export default function Events() {
                   className={cn(
                     "flex-1 px-6 py-3 rounded-sm font-semibold",
                     "bg-secondary text-foreground border border-border",
-                    "hover:bg-secondary/80 transition-colors duration-200"
+                    "hover:bg-secondary/80 transition-colors duration-200",
                   )}
                 >
                   Cancel
@@ -624,7 +671,7 @@ export default function Events() {
                     "bg-black text-white hover:bg-black/90",
                     "transition-all duration-200",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
-                    "flex items-center justify-center gap-2"
+                    "flex items-center justify-center gap-2",
                   )}
                 >
                   {isSubmitting ? (
@@ -651,7 +698,7 @@ export default function Events() {
           <div
             className={cn(
               "bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto",
-              "border-2 border-black/10"
+              "border-2 border-black/10",
             )}
             onClick={(e) => e.stopPropagation()}
           >
@@ -711,7 +758,7 @@ export default function Events() {
                     "p-4 rounded-sm text-sm",
                     submitStatus.type === "success"
                       ? "bg-black/10 text-black border border-black/20"
-                      : "bg-red-50 text-red-700 border border-red-200"
+                      : "bg-red-50 text-red-700 border border-red-200",
                   )}
                 >
                   {submitStatus.message}
@@ -733,7 +780,7 @@ export default function Events() {
                     "w-full px-4 py-3 rounded-sm",
                     "bg-secondary border-2 border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black",
                   )}
                   placeholder="Your full name"
                 />
@@ -754,7 +801,7 @@ export default function Events() {
                     "w-full px-4 py-3 rounded-sm",
                     "bg-secondary border-2 border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black",
                   )}
                   placeholder="Your salon, spa or barbershop name"
                 />
@@ -775,7 +822,7 @@ export default function Events() {
                     "w-full px-4 py-3 rounded-sm",
                     "bg-secondary border-2 border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black",
                   )}
                   placeholder="+254 712 345 678"
                 />
@@ -796,7 +843,7 @@ export default function Events() {
                     "w-full px-4 py-3 rounded-sm",
                     "bg-secondary border-2 border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black",
                   )}
                   placeholder="you@example.com"
                 />
@@ -816,7 +863,7 @@ export default function Events() {
                     "w-full px-4 py-3 rounded-sm resize-none",
                     "bg-secondary border-2 border-border",
                     "text-foreground placeholder:text-foreground/50",
-                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                    "focus:outline-none focus:ring-2 focus:ring-black focus:border-black",
                   )}
                   placeholder="What would you like to see addressed during the webinar?"
                 />
@@ -830,7 +877,7 @@ export default function Events() {
                   className={cn(
                     "flex-1 px-6 py-4 rounded-sm font-semibold",
                     "bg-secondary text-foreground border-2 border-border",
-                    "hover:bg-secondary/80 transition-colors duration-200"
+                    "hover:bg-secondary/80 transition-colors duration-200",
                   )}
                 >
                   Cancel
@@ -843,7 +890,7 @@ export default function Events() {
                     "bg-black text-white hover:bg-black/90",
                     "transition-all duration-200",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
-                    "flex items-center justify-center gap-2"
+                    "flex items-center justify-center gap-2",
                   )}
                 >
                   {isSubmitting ? (
@@ -862,7 +909,8 @@ export default function Events() {
 
               {/* Payment Info */}
               <div className="text-xs text-foreground/60 text-center pt-2 border-t border-border">
-                You will be redirected to Paystack to complete your payment securely
+                You will be redirected to Paystack to complete your payment
+                securely
               </div>
             </form>
           </div>
@@ -870,10 +918,12 @@ export default function Events() {
       )}
 
       {/* Footer */}
-      <footer className={cn(
-        "border-t border-border bg-background",
-        "py-12 px-4 sm:px-6 lg:px-8"
-      )}>
+      <footer
+        className={cn(
+          "border-t border-border bg-background",
+          "py-12 px-4 sm:px-6 lg:px-8",
+        )}
+      >
         <div className="max-w-7xl mx-auto text-center text-sm text-foreground/50">
           <p>&copy; 2026 Spa & Salon Africa. All rights reserved.</p>
         </div>
