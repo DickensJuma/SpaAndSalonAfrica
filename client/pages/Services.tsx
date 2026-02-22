@@ -148,10 +148,10 @@ export default function Services() {
       icon: Scissors,
       description: "One-on-one and group coaching for salon, spa & barbershop owners",
       items: [
-        { name: "Business Foundations Audit", price: "KES 6,000" },
-        { name: "Pricing & Profit Strategy Session", price: "KES 12,000" },
-        { name: "Team & Operations Coaching", price: "KES 9,000" },
-        { name: "Monthly CEO Accountability", price: "KES 18,000" }
+        { name: "Business Foundations Audit", price: "" },
+        { name: "Pricing & Profit Strategy Session", price: "" },
+        { name: "Team & Operations Coaching", price: "" },
+        { name: "Monthly CEO Accountability", price: "" }
       ]
     },
     {
@@ -159,10 +159,10 @@ export default function Services() {
       icon: Sparkles,
       description: "Marketing systems tailored for African beauty businesses",
       items: [
-        { name: "Social Media Content Playbook", price: "KES 8,000" },
-        { name: "Brand Positioning & Messaging", price: "KES 12,000" },
-        { name: "Client Retention & Loyalty Design", price: "KES 9,500" },
-        { name: "Launch Campaign Strategy", price: "KES 15,000" }
+        { name: "Social Media Content Playbook", price: "" },
+        { name: "Brand Positioning & Messaging", price: "" },
+        { name: "Client Retention & Loyalty Design", price: "" },
+        { name: "Launch Campaign Strategy", price: "" }
       ]
     },
     {
@@ -170,10 +170,10 @@ export default function Services() {
       icon: Droplet,
       description: "Back-end systems that keep your business running smoothly",
       items: [
-        { name: "Booking & Scheduling Systems", price: "KES 10,000" },
-        { name: "Standard Operating Procedures Kit", price: "KES 14,000" },
-        { name: "Retail & Inventory Setup", price: "KES 11,000" },
-        { name: "Staff Onboarding Framework", price: "KES 18,000" }
+        { name: "Booking & Scheduling Systems", price: "" },
+        { name: "Standard Operating Procedures Kit", price: "" },
+        { name: "Retail & Inventory Setup", price: "" },
+        { name: "Staff Onboarding Framework", price: "" }
       ]
     },
     {
@@ -181,10 +181,10 @@ export default function Services() {
       icon: Wind,
       description: "Training for owners and teams to level up skills and service",
       items: [
-        { name: "New Owner Bootcamp", price: "KES 15,000" },
-        { name: "Front Desk & Client Experience Training", price: "KES 9,000" },
-        { name: "Retail Sales Training", price: "KES 8,500" },
-        { name: "Leadership for Salon Managers", price: "KES 16,000" }
+        { name: "New Owner Bootcamp", price: "" },
+        { name: "Front Desk & Client Experience Training", price: "" },
+        { name: "Retail Sales Training", price: "" },
+        { name: "Leadership for Salon Managers", price: "" }
       ]
     }
   ];
@@ -282,7 +282,7 @@ export default function Services() {
       </section>
 
       {/* Special Packages */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-secondary/10">
+      {/* <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-secondary/10">
         <div className="max-w-6xl mx-auto">
           <h2
             className={cn(
@@ -364,7 +364,7 @@ export default function Services() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className={cn(

@@ -97,7 +97,7 @@ export default function BusinessClub() {
       </section>
 
       {/* Membership Tiers */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-secondary/10">
+      {/* <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-secondary/10">
         <div className="max-w-4xl mx-auto">
           <h2
             className={cn(
@@ -190,7 +190,7 @@ export default function BusinessClub() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className={cn(

@@ -483,11 +483,11 @@ export default function Landing() {
 
       {/* Marketing Banner - Promote Other Businesses */}
       <MarketingBanner
-        businessName="Featured Partner Business"
-        description="Discover amazing products and services from our trusted partners. We carefully select businesses that align with our mission to support beauty entrepreneurs across Africa."
-        imageUrl="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop"
-        ctaText="Visit Partner"
-        ctaUrl="#"
+        businessName="Spark — Salon Management System"
+        description="Spark helps salons, barbershops, spas, and beauty businesses run smarter with bookings, POS, staff, inventory, and analytics in one platform."
+        imageUrl="/assets/spark_ad.webp"
+        ctaText="Visit Spark"
+        ctaUrl="https://spark.co.ke/"
         backgroundColor="bg-white"
       />
 

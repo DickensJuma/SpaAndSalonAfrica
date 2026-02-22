@@ -127,7 +127,7 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
+      {/* <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <h2
             className={cn(
@@ -165,7 +165,7 @@ export default function About() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className={cn(

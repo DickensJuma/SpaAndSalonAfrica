@@ -304,39 +304,39 @@ export default function Events() {
       description:
         "Join leading salon owners & business experts for actionable growth strategies.",
     },
-    {
-      id: 2,
-      title: "Salon Profitability Bootcamp",
-      date: "April 15, 2026",
-      time: "2:00 PM - 5:00 PM",
-      location: "Spa & Salon Africa - Main Studio",
-      attendees: 25,
-      cta: "Register Now",
-      description:
-        "Understand your numbers, set profitable prices and design packages that work in your market.",
-    },
-    {
-      id: 3,
-      title: "Owner Networking Mixer",
-      date: "April 22, 2026",
-      time: "6:00 PM - 8:00 PM",
-      location: "Spa & Salon Africa - Lounge",
-      attendees: 40,
-      cta: "Register Now",
-      description:
-        "Connect with salon, spa & barbershop owners from your city and share real-world strategies.",
-    },
-    {
-      id: 4,
-      title: "Marketing Made Simple for Salons",
-      date: "May 5, 2026",
-      time: "3:00 PM - 5:30 PM",
-      location: "Spa & Salon Africa - Main Studio",
-      attendees: 30,
-      cta: "Register Now",
-      description:
-        "A step-by-step plan to attract and retain ideal clients using social media and referrals.",
-    },
+    // {
+    //   id: 2,
+    //   title: "Salon Profitability Bootcamp",
+    //   date: "April 15, 2026",
+    //   time: "2:00 PM - 5:00 PM",
+    //   location: "Spa & Salon Africa - Main Studio",
+    //   attendees: 25,
+    //   cta: "Register Now",
+    //   description:
+    //     "Understand your numbers, set profitable prices and design packages that work in your market.",
+    // },
+    // {
+    //   id: 3,
+    //   title: "Owner Networking Mixer",
+    //   date: "April 22, 2026",
+    //   time: "6:00 PM - 8:00 PM",
+    //   location: "Spa & Salon Africa - Lounge",
+    //   attendees: 40,
+    //   cta: "Register Now",
+    //   description:
+    //     "Connect with salon, spa & barbershop owners from your city and share real-world strategies.",
+    // },
+    // {
+    //   id: 4,
+    //   title: "Marketing Made Simple for Salons",
+    //   date: "May 5, 2026",
+    //   time: "3:00 PM - 5:30 PM",
+    //   location: "Spa & Salon Africa - Main Studio",
+    //   attendees: 30,
+    //   cta: "Register Now",
+    //   description:
+    //     "A step-by-step plan to attract and retain ideal clients using social media and referrals.",
+    // },
   ];
 
   return (
